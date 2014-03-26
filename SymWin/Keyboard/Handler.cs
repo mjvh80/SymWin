@@ -999,9 +999,10 @@ namespace SymWin.Keyboard
          // If we get here with a letter without our hotkey, exit pronto.
          if (e.Key != Key.CapsLock && !e.ModifierCapsLock) return false;
 
-         if (_sActiveSelectorWindow == null)
+         if (_sActiveSelectorWindow == null && e.Key != Key.Left && e.Key != Key.Right)
          {
-            if (!LetterMappings.LettersToWindow.TryGetValue(LetterMappings.KeyToLetter(e.Key), out _sActiveSelectorWindow)) return false;
+            if (!LetterMappings.LettersToWindow.TryGetValue(LetterMappings.KeyToLetter(e.Key), out _sActiveSelectorWindow)) 
+               return false;
          }
 
          var selectorShowing = _sActiveSelectorWindow.IsActive && _sActiveSelectorWindow.IsVisible;
@@ -1010,7 +1011,10 @@ namespace SymWin.Keyboard
          if (selectorShowing && isDown && e.Key != Key.CapsLock)
          {
             // todo: if shift, selectprevious or caps?
-            _sActiveSelectorWindow.SelectNext();
+            if (e.Key == Key.Left)
+               _sActiveSelectorWindow.SelectPrevious();
+            else
+               _sActiveSelectorWindow.SelectNext();
             return true;
          }
 

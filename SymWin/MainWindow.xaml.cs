@@ -34,6 +34,10 @@ namespace SymWin
          foreach (var letter in LetterMappings.LetterToSymbols.Keys)
             Listener.HookedKeys.Add(LetterMappings.LetterToKey(letter));
 
+         // Hook left, right arrow keys to move the selector.
+         Listener.HookedKeys.Add(Key.Left);
+         Listener.HookedKeys.Add(Key.Right);
+
          // Hook our "hot key".
          Listener.HookedKeys.Add(Key.CapsLock);
          Listener.Register();

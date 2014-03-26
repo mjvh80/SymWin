@@ -72,6 +72,16 @@ namespace SymWin
          letters.ElementAt(_mActiveIndex).Focus();
       }
 
+      public void SelectPrevious()
+      {
+         var letters = FindVisualChildren<TextBox>(this);
+         var count = letters.Count();
+
+         _mActiveIndex = (count + _mActiveIndex - 1) % count;
+
+         letters.ElementAt(_mActiveIndex).Focus();
+      }
+
       private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
       {
       }
