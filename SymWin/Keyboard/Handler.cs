@@ -992,35 +992,40 @@ namespace SymWin.Keyboard
       }
 
       private static IntPtr _sActiveKeyboardWindow;
+      private static LetterSelector _sActiveSelectorWindow;
 
       public static Boolean HandleKeyPress(Boolean isDown, Listener.KeyHookEventArgs e)
       {
-         // Todo: better shortcut.
-         if (e.Key == Key.A && !e.ModifierCapsLock) return false;
+         // If we get here with a letter without our hotkey, exit pronto.
+         if (e.Key != Key.CapsLock && !e.ModifierCapsLock) return false;
 
-         var selectorWindow = MainWindow.Selector;
-         var selectorShowing = selectorWindow.IsActive && selectorWindow.IsVisible;
+         if (_sActiveSelectorWindow == null)
+         {
+            if (!LetterMappings.LettersToWindow.TryGetValue(LetterMappings.KeyToLetter(e.Key), out _sActiveSelectorWindow)) return false;
+         }
+
+         var selectorShowing = _sActiveSelectorWindow.IsActive && _sActiveSelectorWindow.IsVisible;
 
          // If the selector is showing, and this is a down press, go to next key.
-         if (selectorShowing && isDown && e.Key == Key.A)
+         if (selectorShowing && isDown && e.Key != Key.CapsLock)
          {
             // todo: if shift, selectprevious or caps?
-            selectorWindow.SelectNext();
+            _sActiveSelectorWindow.SelectNext();
             return true;
          }
 
          // If selector is not showing and this is a down press, show it.
-         if (!selectorShowing && isDown && e.Key == Key.A)
+         if (!selectorShowing && isDown && e.Key != Key.CapsLock)
          {
             _sActiveKeyboardWindow = GetForegroundWindow();
 
             var position = Caret.GetPosition();
 
-            selectorWindow.Left = position.X;
-            selectorWindow.Top = position.Y;
+            _sActiveSelectorWindow.Left = position.X;
+            _sActiveSelectorWindow.Top = position.Y;
 
-            selectorWindow.Visibility = Visibility.Visible;
-            selectorWindow.Activate();
+            _sActiveSelectorWindow.Visibility = Visibility.Visible;
+            _sActiveSelectorWindow.Activate();
             return true;
          }
 
@@ -1034,9 +1039,10 @@ namespace SymWin.Keyboard
          // At this point we're handling the key up without capslock.
 
          var pos = Caret.GetPosition();
-         var letter = selectorWindow.SelectedLetter;
+         var letter = _sActiveSelectorWindow.SelectedLetter;
          
-         selectorWindow.Visibility = Visibility.Hidden;
+         _sActiveSelectorWindow.Visibility = Visibility.Hidden;
+         _sActiveSelectorWindow = null;
 
          SetForegroundWindow(_sActiveKeyboardWindow);
          //SetFocus(_mActiveKeyboardWindow);

@@ -28,12 +28,17 @@ namespace SymWin
       {
          InitializeComponent();
 
+         LetterMappings.InitializeWindows();
+
          // Register keys.
-         Listener.HookedKeys.Add(Key.A);
+         foreach (var letter in LetterMappings.LetterToSymbols.Keys)
+            Listener.HookedKeys.Add(LetterMappings.LetterToKey(letter));
+
+         // Hook our "hot key".
          Listener.HookedKeys.Add(Key.CapsLock);
          Listener.Register();
 
-         Selector = new LetterSelector();
+         Selector = new LetterSelector(LetterMappings.LetterToSymbols['a']); // 'a', 'b', 'c', 'd');
        //  Selector.Show();
 
          Listener.KeyDown += new Listener.KeyHookEventHandler(e => Handler.HandleKeyPress(true, e));

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SymWin;
 
 namespace SymWin
 {
@@ -20,9 +21,33 @@ namespace SymWin
    /// </summary>
    public partial class LetterSelector : Window
    {
-      public LetterSelector()
+      public LetterSelector(params Char[] letters)
       {
+         if (letters == null || letters.Length == 0) throw new ArgumentException("Missing letters");
+
          InitializeComponent();
+
+         var letterTemplate = Utils.CloneWPFObject(this.LetterPanel.Children.Cast<TextBox>().First());
+
+         // Remove sample children.
+         this.LetterPanel.Children.Clear();
+
+         var width = 0.0;
+
+         // Add letters in order of appearance.
+         foreach (var letter in letters)
+         {
+            var newLetter = Utils.CloneWPFObject(letterTemplate);
+            newLetter.Text = letter.ToString();
+
+            this.LetterPanel.Children.Add(newLetter);
+
+            width += newLetter.Width;
+         }
+
+         // Restrict window size to panel width.
+         this.Width = width;
+         this.Height = letterTemplate.Height;
 
          this.Loaded += (_, __) => SelectNext();
       }
