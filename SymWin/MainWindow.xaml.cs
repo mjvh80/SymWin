@@ -22,7 +22,7 @@ namespace SymWin
          var args = Environment.GetCommandLineArgs();
 
          var showWindow = false;
-
+         
          foreach (var arg in args.Skip(1))
          {
             switch (arg)
