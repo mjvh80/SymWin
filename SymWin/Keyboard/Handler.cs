@@ -999,13 +999,35 @@ namespace SymWin.Keyboard
          // If we get here with a letter without our hotkey, exit pronto.
          if (e.Key != Key.CapsLock && !e.ModifierCapsLock) return false;
 
-         if (_sActiveSelectorWindow == null && e.Key != Key.Left && e.Key != Key.Right)
+         if (_sActiveSelectorWindow == null)
          {
+            // if (e.Key != Key.Left && e.Key != Key.Right))
             if (!LetterMappings.LettersToWindow.TryGetValue(LetterMappings.KeyToLetter(e.Key), out _sActiveSelectorWindow)) 
                return false;
          }
 
+         if (_sActiveSelectorWindow == null) return false;
+
          var selectorShowing = _sActiveSelectorWindow.IsActive && _sActiveSelectorWindow.IsVisible;
+
+         // Change case if shift is used.
+         // First we need an additional shift key press to activate it, then we'll handle it as a modifier.
+         if (e.Key == Key.LeftShift || e.Key == Key.RightShift)
+         {
+            if (selectorShowing)
+            {
+               if (isDown)
+                  _sActiveSelectorWindow.ToUpper();
+               else
+                  _sActiveSelectorWindow.ToLower();
+            }
+
+            return selectorShowing;
+         }
+         else if (selectorShowing && !e.ModifierAnyShift)
+         {
+            _sActiveSelectorWindow.ToLower();
+         }
 
          // If the selector is showing, and this is a down press, go to next key.
          if (selectorShowing && isDown && e.Key != Key.CapsLock)

@@ -40,6 +40,8 @@ namespace SymWin
 
          // Hook our "hot key".
          Listener.HookedKeys.Add(Key.CapsLock);
+         Listener.HookedKeys.Add(Key.LeftShift);
+         Listener.HookedKeys.Add(Key.RightShift);
          Listener.Register();
 
          Selector = new LetterSelector(LetterMappings.LetterToSymbols['a']); // 'a', 'b', 'c', 'd');

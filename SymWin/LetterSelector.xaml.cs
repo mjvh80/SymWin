@@ -35,10 +35,27 @@ namespace SymWin
          var width = 0.0;
 
          // Add letters in order of appearance.
-         foreach (var letter in letters)
+         for (var i = 0; i < letters.Length; i++ )
          {
+            var letter = letters[i];
             var newLetter = Utils.CloneWPFObject(letterTemplate);
-            newLetter.Text = letter.ToString();
+
+            // Adjust border thickness. It'd be nice if we can (?) do this in xaml using style ala css pseudo selectors
+            var borderThick = newLetter.BorderThickness;
+            borderThick.Left = borderThick.Right = 1;
+            if (i == 0)
+            {
+               borderThick.Right = letters.Length > 1 ? 1 : 2;
+               borderThick.Left = 2;
+            }
+            else if (i == letters.Length - 1)
+            {
+               borderThick.Left = letters.Length > 1 ? 1 : 2;
+               borderThick.Right = 2;
+            }
+            newLetter.BorderThickness = borderThick;
+
+            newLetter.Text = letter.ToString(); // todo: culture?
 
             this.LetterPanel.Children.Add(newLetter);
 
@@ -72,6 +89,20 @@ namespace SymWin
          letters.ElementAt(_mActiveIndex).Focus();
       }
 
+      public void ToUpper()
+      {
+         // What about culture? (todo)
+         foreach (var textBox in EnumerateTextBoxes())
+            textBox.Text = textBox.Text.ToUpper();
+      }
+
+      public void ToLower()
+      {
+         // What about culture? (todo)
+         foreach (var textBox in EnumerateTextBoxes())
+            textBox.Text = textBox.Text.ToLower();
+      }
+
       public void SelectPrevious()
       {
          var letters = FindVisualChildren<TextBox>(this);
@@ -84,6 +115,11 @@ namespace SymWin
 
       private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
       {
+      }
+
+      private IEnumerable<TextBox> EnumerateTextBoxes()
+      {
+         return FindVisualChildren<TextBox>(this);
       }
 
       public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
