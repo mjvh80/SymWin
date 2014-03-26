@@ -9,15 +9,13 @@ It looks like this:
 
 ![screenshot](SymWin/screenshot.png)
 
-To type a symbol type CAPSLOCK and then (say) the a key. This will show the above popup.
+To type a symbol hold down CAPSLOCK and then (say) the *a* key. This will show the above popup.
 
-To type an uppercase symbol, simply add SHIFT to the above keys.
+To type an uppercase symbol, simply add SHIFT to the above key sequence.
 
-To cycle options keep pressing the letter key, or use the arrow keys on the keyboard.
+To cycle options keep pressing the letter key, or use the arrow keys on the keyboard. You can also use the mouse to select a symbol.
 
-Finally you can also use the mouse to select a symbol.
-
-This is just an initial rough version which seems to be working.
+This is just an initial rough version which is working well in most applications.
 
 Things I'd like to do:
 ----------------------
@@ -26,6 +24,8 @@ Things I'd like to do:
 - the code can be optimized
 - make "hot key" (currently CAPSLOCK) configurable
 - how to deal with various cultures
+- deal with popup showing outside of screen boundaries
+- investigate why it does not work in Visual Studio
 - add tasktray support
 - add support for configuring symbols (via tasktray settings menu)
 
