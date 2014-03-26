@@ -1001,6 +1001,9 @@ namespace SymWin.Keyboard
 
          if (_sActiveSelectorWindow == null)
          {
+            if (e.Key == Key.CapsLock)
+               return true; // disable capslock
+
             // if (e.Key != Key.Left && e.Key != Key.Right))
             if (!LetterMappings.LettersToWindow.TryGetValue(LetterMappings.KeyToLetter(e.Key), out _sActiveSelectorWindow)) 
                return false;

@@ -26,6 +26,30 @@ namespace SymWin
 
       public MainWindow()
       {
+         var args = Environment.GetCommandLineArgs();
+
+         var showWindow = false;
+
+         foreach (var arg in args.Skip(1))
+         {
+            switch (arg)
+            {
+               case "--window":
+                  showWindow = true;
+                  break;
+
+               default:
+                  Console.Error.WriteLine("Unknown parameter: " + arg);
+                  Environment.Exit(1); return;
+            }
+         }
+
+         if (!showWindow)
+         {
+            this.Visibility = System.Windows.Visibility.Hidden;
+            this.ShowInTaskbar = false;
+         }
+
          InitializeComponent();
 
          LetterMappings.InitializeWindows();
@@ -44,8 +68,7 @@ namespace SymWin
          Listener.HookedKeys.Add(Key.RightShift);
          Listener.Register();
 
-         Selector = new LetterSelector(LetterMappings.LetterToSymbols['a']); // 'a', 'b', 'c', 'd');
-       //  Selector.Show();
+         Selector = new LetterSelector(LetterMappings.LetterToSymbols['a']);
 
          Listener.KeyDown += new Listener.KeyHookEventHandler(e => Handler.HandleKeyPress(true, e));
          Listener.KeyUp += new Listener.KeyHookEventHandler(e => Handler.HandleKeyPress(false, e));
