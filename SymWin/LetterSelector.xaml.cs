@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SymWin;
+using SymWin.Keyboard;
 
 namespace SymWin
 {
@@ -39,6 +40,9 @@ namespace SymWin
          {
             var letter = letters[i];
             var newLetter = Utils.CloneWPFObject(letterTemplate);
+
+            // Todo: it seems our "clone" is not cloning events, so let's hook it here.
+            newLetter.PreviewMouseUp += OnMouseUp;
 
             // Adjust border thickness. It'd be nice if we can (?) do this in xaml using style ala css pseudo selectors
             var borderThick = newLetter.BorderThickness;
@@ -113,7 +117,7 @@ namespace SymWin
          letters.ElementAt(_mActiveIndex).Focus();
       }
 
-      private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+      private void TextBox_TextChanged(Object sender, TextChangedEventArgs e)
       {
       }
 
@@ -126,7 +130,7 @@ namespace SymWin
       {
          if (depObj != null)
          {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            for (Int32 i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
             {
                DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
                if (child != null && child is T)
@@ -142,9 +146,18 @@ namespace SymWin
          }
       }
 
-      private void OnWindowDeactivated(object sender, EventArgs e)
+      private void OnWindowDeactivated(Object sender, EventArgs e)
       {
          this.Visibility = System.Windows.Visibility.Hidden;
+      }
+
+      private void OnMouseUp(Object sender, MouseButtonEventArgs e)
+      {
+         var textBox = e.Source as TextBox;
+         if (textBox == null) return;
+         _mActiveIndex = Array.IndexOf(EnumerateTextBoxes().ToArray(), textBox); // todo: avoid this nonsense
+         textBox.Focus();
+         Handler.HandleMouseUp();
       }
    }
 }

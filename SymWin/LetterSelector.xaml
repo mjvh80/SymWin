@@ -12,7 +12,7 @@
       </Style>
    </Window.Resources>
    <DockPanel Name="LetterPanel">
-      <TextBox Name="FirstBox" IsReadOnly="True" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" Text="a" VerticalAlignment="Top" Width="29" FontSize="20" TextAlignment="Center" BorderBrush="Black" BorderThickness="2,2,1,2" SelectionBrush="Black"/>
+      <TextBox Name="FirstBox" IsReadOnly="True" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" Text="a" VerticalAlignment="Top" Width="29" FontSize="20" TextAlignment="Center" BorderBrush="Black" BorderThickness="2,2,1,2" SelectionBrush="Black" PreviewMouseUp="OnMouseUp"/>
       <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" Text="ä" VerticalAlignment="Top" Width="29" FontSize="20" TextAlignment="Center" BorderBrush="Black" BorderThickness="1,2" TextChanged="TextBox_TextChanged" SelectionBrush="Black"/>
       <TextBox IsReadOnly="True"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" Text="α" VerticalAlignment="Top" Width="29" FontSize="20" TextAlignment="Center" BorderBrush="Black" BorderThickness="1,2,2,2" TextChanged="TextBox_TextChanged" SelectionBrush="Black"/>
    </DockPanel>

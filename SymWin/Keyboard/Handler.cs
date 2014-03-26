@@ -1062,11 +1062,24 @@ namespace SymWin.Keyboard
          // If the selector is not showing, disable the activator key.
          if (!selectorShowing) return true;
 
+         _SendSelectedLetterAsKeyPress();
+         return true;
+      }
+
+      public static void HandleMouseUp()
+      {
+         if (_sActiveSelectorWindow == null) return;
+         if (!_sActiveSelectorWindow.IsActive || !_sActiveSelectorWindow.IsVisible) return;
+         _SendSelectedLetterAsKeyPress();
+      }
+
+      private static void _SendSelectedLetterAsKeyPress()
+      {
          // At this point we're handling the key up without capslock.
 
          var pos = Caret.GetPosition();
          var letter = _sActiveSelectorWindow.SelectedLetter;
-         
+
          _sActiveSelectorWindow.Visibility = Visibility.Hidden;
          _sActiveSelectorWindow = null;
 
@@ -1092,21 +1105,6 @@ namespace SymWin.Keyboard
 
          if (result <= 0)
             throw new Win32Exception(Marshal.GetLastWin32Error());
-
-
-         // Only when using capslock, but undo the capslock.
-         /*
-         keyUp.U.ki = new KEYBDINPUT();
-         keyUp.U.ki.wVk = VirtualKeyShort.CAPITAL;
-         //keyUp.U.ki.dwFlags = KEYEVENTF.KEYUP;
-
-         result = SendInput(1, new[] { keyUp }, Marshal.SizeOf(keyUp)); // <= 0)
-
-         if (result <= 0)
-            throw new Win32Exception(Marshal.GetLastWin32Error());
-         */
-
-         return true;
       }
    }
 }

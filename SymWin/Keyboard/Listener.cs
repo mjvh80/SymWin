@@ -61,6 +61,13 @@ namespace SymWin.Keyboard
 
       public class KeyHookEventArgs
       {
+         public static readonly KeyHookEventArgs None = new KeyHookEventArgs()
+         {
+            Key = Key.None
+
+            // Other fields left to their default: false
+         };
+
          public KeyHookEventArgs()
          {
          }
