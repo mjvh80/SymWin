@@ -70,5 +70,10 @@ namespace SymWin
             }
          }
       }
+
+      private void OnWindowDeactivated(object sender, EventArgs e)
+      {
+         this.Visibility = System.Windows.Visibility.Hidden;
+      }
    }
 }

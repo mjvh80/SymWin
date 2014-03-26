@@ -42,6 +42,7 @@ namespace SymWin
 
       private void Button_Click(object sender, RoutedEventArgs e)
       {
+         Selector.Show();
          Selector.SelectNext();
       }
    }

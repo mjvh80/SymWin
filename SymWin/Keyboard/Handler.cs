@@ -991,8 +991,7 @@ namespace SymWin.Keyboard
          MessageBox.Show("Sent input: " + result);
       }
 
-      private static Boolean _mSelectorShowing;
-      private static IntPtr _mActiveKeyboardWindow;
+      private static IntPtr _sActiveKeyboardWindow;
 
       public static Boolean HandleKeyPress(Boolean isDown, Listener.KeyHookEventArgs e)
       {
@@ -1000,52 +999,46 @@ namespace SymWin.Keyboard
          if (e.Key == Key.A && !e.ModifierCapsLock) return false;
 
          var selectorWindow = MainWindow.Selector;
+         var selectorShowing = selectorWindow.IsActive && selectorWindow.IsVisible;
 
          // If the selector is showing, and this is a down press, go to next key.
-         if (_mSelectorShowing && isDown && e.Key == Key.A)
+         if (selectorShowing && isDown && e.Key == Key.A)
          {
             // todo: if shift, selectprevious or caps?
-            MainWindow.Selector.SelectNext();
+            selectorWindow.SelectNext();
             return true;
          }
 
          // If selector is not showing and this is a down press, show it.
-         if (!_mSelectorShowing && isDown && e.Key == Key.A)
+         if (!selectorShowing && isDown && e.Key == Key.A)
          {
-            _mSelectorShowing = true;
-            _mActiveKeyboardWindow = GetForegroundWindow();
+            _sActiveKeyboardWindow = GetForegroundWindow();
 
             var position = Caret.GetPosition();
 
-            MainWindow.Selector.Left = position.X;
-            MainWindow.Selector.Top = position.Y;
+            selectorWindow.Left = position.X;
+            selectorWindow.Top = position.Y;
 
-            MainWindow.Selector.Visibility = Visibility.Visible;
-            //     MainWindow.Selector.Show();
-            MainWindow.Selector.Activate();
-            //MainWindow.Selector.Topmost = false;
-            //MainWindow.Selector.Topmost = true;
-            //MainWindow.Selector.Focus();
+            selectorWindow.Visibility = Visibility.Visible;
+            selectorWindow.Activate();
             return true;
          }
 
          // If the selector is showing, mark key as handled.
-         if (_mSelectorShowing && (e.Key != Key.CapsLock || isDown))
+         if (selectorShowing && (e.Key != Key.CapsLock || isDown))
             return true;
 
-         if (!_mSelectorShowing) return false;
-
-   //      if (isDown || e.Key != Key.CapsLock) return false;
+         // If the selector is not showing, disable the activator key.
+         if (!selectorShowing) return true;
 
          // At this point we're handling the key up without capslock.
 
          var pos = Caret.GetPosition();
-         var letter = MainWindow.Selector.SelectedLetter;
+         var letter = selectorWindow.SelectedLetter;
          
-         MainWindow.Selector.Visibility = Visibility.Hidden;
-         _mSelectorShowing = false;
+         selectorWindow.Visibility = Visibility.Hidden;
 
-         SetForegroundWindow(_mActiveKeyboardWindow);
+         SetForegroundWindow(_sActiveKeyboardWindow);
          //SetFocus(_mActiveKeyboardWindow);
 
          // Send "alpha" to the input app.
@@ -1068,23 +1061,20 @@ namespace SymWin.Keyboard
          if (result <= 0)
             throw new Win32Exception(Marshal.GetLastWin32Error());
 
-         // Todo: send a capslock to disable it again?
 
+         // Only when using capslock, but undo the capslock.
+         /*
+         keyUp.U.ki = new KEYBDINPUT();
+         keyUp.U.ki.wVk = VirtualKeyShort.CAPITAL;
+         //keyUp.U.ki.dwFlags = KEYEVENTF.KEYUP;
 
+         result = SendInput(1, new[] { keyUp }, Marshal.SizeOf(keyUp)); // <= 0)
 
-         //var win = new LetterSelector();
-         //win.Left = pos.X;
-         //win.Top = pos.Y;
-
-         //win.Show();
-
-         //   Thread.Sleep(3000);
+         if (result <= 0)
+            throw new Win32Exception(Marshal.GetLastWin32Error());
+         */
 
          return true;
-
-         // var result = System.Windows.MessageBox.Show("got key down at " + pos.X + ", " + pos.Y);
-
-         // return result == System.Windows.MessageBoxResult.OK ? false : true;
       }
    }
 }
