@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿/*
+ * © Marcus van Houdt 2014
+ */
+
+using System;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -994,7 +992,7 @@ namespace SymWin.Keyboard
       private static IntPtr _sActiveKeyboardWindow;
       private static LetterSelector _sActiveSelectorWindow;
 
-      public static Boolean HandleKeyPress(Boolean isDown, Listener.KeyHookEventArgs e)
+      public static Boolean HandleKeyPress(Boolean isDown, LowLevelListener.KeyHookEventArgs e)
       {
          // If we get here with a letter without our hotkey, exit pronto.
          if (e.Key != Key.CapsLock && !e.ModifierCapsLock) return false;

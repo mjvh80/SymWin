@@ -1,19 +1,12 @@
-﻿using SymWin.Keyboard;
+﻿/*
+ * © Marcus van Houdt 2014
+ */
+
+using SymWin.Keyboard;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SymWin
 {
@@ -56,22 +49,22 @@ namespace SymWin
 
          // Register keys.
          foreach (var letter in LetterMappings.LetterToSymbols.Keys)
-            Listener.HookedKeys.Add(LetterMappings.LetterToKey(letter));
+            LowLevelListener.HookedKeys.Add(LetterMappings.LetterToKey(letter));
 
          // Hook left, right arrow keys to move the selector.
-         Listener.HookedKeys.Add(Key.Left);
-         Listener.HookedKeys.Add(Key.Right);
+         LowLevelListener.HookedKeys.Add(Key.Left);
+         LowLevelListener.HookedKeys.Add(Key.Right);
 
          // Hook our "hot key".
-         Listener.HookedKeys.Add(Key.CapsLock);
-         Listener.HookedKeys.Add(Key.LeftShift);
-         Listener.HookedKeys.Add(Key.RightShift);
-         Listener.Register();
+         LowLevelListener.HookedKeys.Add(Key.CapsLock);
+         LowLevelListener.HookedKeys.Add(Key.LeftShift);
+         LowLevelListener.HookedKeys.Add(Key.RightShift);
+         LowLevelListener.Register();
 
          Selector = new LetterSelector(LetterMappings.LetterToSymbols['a']);
 
-         Listener.KeyDown += new Listener.KeyHookEventHandler(e => Handler.HandleKeyPress(true, e));
-         Listener.KeyUp += new Listener.KeyHookEventHandler(e => Handler.HandleKeyPress(false, e));
+         LowLevelListener.KeyDown += new LowLevelListener.KeyHookEventHandler(e => Handler.HandleKeyPress(true, e));
+         LowLevelListener.KeyUp += new LowLevelListener.KeyHookEventHandler(e => Handler.HandleKeyPress(false, e));
       }
 
       private void Button_Click(object sender, RoutedEventArgs e)

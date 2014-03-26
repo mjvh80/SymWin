@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+/*
+ * © Marcus van Houdt 2014
+ */
+
 using System.Windows.Input;
 
 namespace SymWin
@@ -13,6 +13,8 @@ namespace SymWin
       public static readonly Dictionary<Char, Char[]> LetterToSymbols = new Dictionary<Char, Char[]>
       {
          // ξοςυφψ
+
+         // Initial rough mapping for letters, not too much thought has gone into this yet.
 
          { 'a', new[] { 'ä', 'å', 'à', 'á', 'α', 'æ' }},
          { 'b', new[] { 'β' }},
@@ -55,6 +57,9 @@ namespace SymWin
 
       public static Dictionary<Char, LetterSelector> LettersToWindow { get; private set; }
 
+      /// <summary>
+      /// Constructs a popup window for each of the letter mappings.
+      /// </summary>
       public static void InitializeWindows()
       {
          LettersToWindow = new Dictionary<Char, LetterSelector>();

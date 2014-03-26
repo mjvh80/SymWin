@@ -1,19 +1,21 @@
-﻿using System;
+﻿/*
+ * This is based on code by Jan Dyrk (http://uxsoft.cz/) for the Apple Wireless Keyboard.
+ */
+
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
-using System.Diagnostics;
-using System.Windows;
 
 namespace SymWin.Keyboard
 {
    /// <summary>
    /// A class that manages a global low level keyboard hook
    /// </summary>
-   public static class Listener
+   public static class LowLevelListener
    {
-      static Listener()
+      static LowLevelListener()
       {
          HookedKeys = new List<Key>();
          Hook = IntPtr.Zero;
