@@ -14,13 +14,15 @@ namespace SymWin
       {
          // ξοςυφψ
 
+         // todo: different symbols for caps, e.g. Ð ?
+
          // Initial rough mapping for letters, not too much thought has gone into this yet.
 
          { 'a', new[] { 'ä', 'å', 'à', 'á', 'α', 'æ' }},
          { 'b', new[] { 'β' }},
-         { 'c', new[] { 'ç', 'γ' }},
+         { 'c', new[] { 'ç', 'γ', '©' }},
          { 'd', new[] { 'Þ', 'ð', 'δ' }},
-         { 'e', new[] { 'è', 'é', 'ê', 'ë', 'ε', 'η' }},
+         { 'e', new[] { 'ë', 'è', 'é', 'ê', 'ε', 'η' }},
          { 'f', new[] { 'ƒ', 'θ' }},
          // { 'g', new[] { '' }}
          // h -> astro h?
@@ -29,19 +31,21 @@ namespace SymWin
          { 'l', new[] { 'λ' }},
          { 'm', new[] { 'µ' }},
          { 'k', new[] { 'κ' }},
-         { 'n', new[] { 'ν' }},
-         { 'o', new[] { 'ò', 'ó', 'ô', 'õ', 'ö', 'ø' }},
-         { 'p', new[] { 'π' }},
+         { 'n', new[] { 'ñ', 'ν' }},
+         { 'o', new[] { 'ö', 'ò', 'ó', 'ô', 'õ', 'ø' }},
+         { 'p', new[] { 'π', '¶' }},
          // { 'q', new[] {} },
-         { 'r', new[] { 'ρ' }},
+         { 'r', new[] { '®', 'ρ' }},
          { 's', new[] { 'ß', 'š', 'σ' }},
          { 't', new[] { 'τ' }},
          { 'u', new[] { 'ù', 'ú', 'û', 'ü' }},
          // { 'v', new[] {}},
          { 'w', new[] { 'ω' }},
-         { 'x', new[] { 'χ' }},
+         { 'x', new[] { 'χ', '×' }},
          { 'y', new[] { 'ý', 'ÿ'}},
          { 'z', new[] { 'ζ' }}
+
+         // todo: symbols for numbers, e.g. ½
       };
 
       public static Key LetterToKey(Char letter)

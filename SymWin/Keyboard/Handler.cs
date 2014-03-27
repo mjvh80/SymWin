@@ -966,6 +966,23 @@ namespace SymWin.Keyboard
       [DllImport("user32.dll")]
       private static extern Boolean SetForegroundWindow(IntPtr handle);
 
+      [StructLayout(LayoutKind.Sequential)]
+      private struct MONITORINFO
+      {
+         public int cbSize;
+         public RECT rcMonitor;
+         public RECT rcWork;
+         public uint dwFlags;
+      }
+
+      private const Int32 MONITOR_DEFAULTTONEAREST = 0x00000002;
+
+      [DllImport("user32.dll")]
+      private static extern IntPtr MonitorFromPoint(Point p, Int32 flags);
+
+      [DllImport("user32.dll")]
+      static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
+
       #endregion
 
       public static void SendInput()
@@ -1047,6 +1064,29 @@ namespace SymWin.Keyboard
             _sActiveKeyboardWindow = GetForegroundWindow();
 
             var position = Caret.GetPosition();
+
+            // Assume that if the position is 0, 0 there is no caret at that position.
+            // This happens if the shortcut is used in an application that is not showing an active
+            // caret. It is unlikely we'd have a caret at that position.
+            if (position.X == 0 && position.Y == 0) 
+               return true; // still mark as handled though
+
+            // Get the monitor on which we are and see if we need to adjust location to avoid falling off.
+            var monitor = MonitorFromPoint(position, MONITOR_DEFAULTTONEAREST);
+            if (monitor != IntPtr.Zero)
+            {
+               // Get monitor size.
+               MONITORINFO info = new MONITORINFO();
+               info.cbSize = Marshal.SizeOf(info);
+               if (GetMonitorInfo(monitor, ref info))
+               {
+                  // Adjust position to fit within the given dimensions.
+                  if (position.X + _sActiveSelectorWindow.ActualWidth > info.rcWork.Right)
+                     position.X = info.rcWork.Right - (Int32)_sActiveSelectorWindow.ActualWidth;
+                  if (position.Y + _sActiveSelectorWindow.ActualHeight > info.rcWork.Bottom)
+                     position.Y = info.rcWork.Bottom - (Int32)_sActiveSelectorWindow.ActualHeight;
+               }
+            }
 
             _sActiveSelectorWindow.Left = position.X;
             _sActiveSelectorWindow.Top = position.Y;

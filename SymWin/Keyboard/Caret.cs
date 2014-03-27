@@ -53,8 +53,8 @@ namespace SymWin.Keyboard
          GetGUIThreadInfo(0, out info);
 
          Point caretPos;
-         caretPos.X = info.rcCaret.Left + 25;
-         caretPos.Y = info.rcCaret.Bottom + 25;
+         caretPos.X = info.rcCaret.Left;
+         caretPos.Y = info.rcCaret.Bottom;
 
          ClientToScreen(info.hwndCaret, ref caretPos);
 
