@@ -1050,8 +1050,7 @@ namespace SymWin.Keyboard
          // If the selector is showing, and this is a down press, go to next key.
          if (selectorShowing && isDown && e.Key != Key.CapsLock)
          {
-            // todo: if shift, selectprevious or caps?
-            if (e.Key == Key.Left)
+            if (e.Key == Key.Left || (e.Key != Key.Right && e.ModifierAnyAlt))
                _sActiveSelectorWindow.SelectPrevious();
             else
                _sActiveSelectorWindow.SelectNext();

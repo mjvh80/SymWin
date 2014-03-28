@@ -5,14 +5,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SymWin", "SymWin.csproj", "
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|Any CPU = CD_ROM|Any CPU
 		Debug|Any CPU = Debug|Any CPU
+		DVD-5|Any CPU = DVD-5|Any CPU
 		Release|Any CPU = Release|Any CPU
+		SingleImage|Any CPU = SingleImage|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2812DA5-A6D6-4ACF-875C-AF2356348E3E}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{B2812DA5-A6D6-4ACF-875C-AF2356348E3E}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
 		{B2812DA5-A6D6-4ACF-875C-AF2356348E3E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B2812DA5-A6D6-4ACF-875C-AF2356348E3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2812DA5-A6D6-4ACF-875C-AF2356348E3E}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2812DA5-A6D6-4ACF-875C-AF2356348E3E}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
 		{B2812DA5-A6D6-4ACF-875C-AF2356348E3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2812DA5-A6D6-4ACF-875C-AF2356348E3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2812DA5-A6D6-4ACF-875C-AF2356348E3E}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{B2812DA5-A6D6-4ACF-875C-AF2356348E3E}.SingleImage|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

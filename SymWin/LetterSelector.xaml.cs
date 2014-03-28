@@ -36,9 +36,13 @@ namespace SymWin
          {
             var letter = letters[i];
             var newLetter = Utils.CloneWPFObject(letterTemplate);
+            
 
             // Todo: it seems our "clone" is not cloning events, so let's hook it here.
             newLetter.PreviewMouseUp += OnMouseUp;
+
+            // I'd like to hide these, but it's not working.
+            // newLetter.ToolTip = new ToolTip() { Visibility = System.Windows.Visibility.Hidden };
 
             // Adjust border thickness. It'd be nice if we can (?) do this in xaml using style ala css pseudo selectors
             var borderThick = newLetter.BorderThickness;
