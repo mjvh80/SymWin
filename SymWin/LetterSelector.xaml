@@ -11,11 +11,12 @@
                <Setter Property="Foreground" Value="White" />
             </Trigger>
          </Style.Triggers>
+         <Setter Property="Cursor" Value="Arrow" />
          <Setter Property="Template">
             <Setter.Value>
                <ControlTemplate TargetType="TextBox">
                   <Border Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                     <ScrollViewer  Margin="{TemplateBinding Padding}" VerticalScrollBarVisibility="Hidden" ToolTipService.ToolTip="{TemplateBinding Text}" x:Name="PART_ContentHost" Foreground="{TemplateBinding Foreground}"/>
+                     <ScrollViewer  Margin="{TemplateBinding Padding}" VerticalScrollBarVisibility="Hidden" x:Name="PART_ContentHost" Foreground="{TemplateBinding Foreground}"/>
                   </Border>
                   <ControlTemplate.Triggers>
                      <Trigger Property="IsFocused" Value="True">

@@ -45,6 +45,8 @@ namespace SymWin
 
          InitializeComponent();
 
+         Handler.ValidateCAPSLOCKState();
+
          LetterMappings.InitializeWindows();
 
          // Register keys.
@@ -61,7 +63,7 @@ namespace SymWin
          LowLevelListener.HookedKeys.Add(Key.RightShift);
          LowLevelListener.Register();
 
-         Selector = new LetterSelector(LetterMappings.LetterToSymbols['a']);
+         Selector = new LetterSelector(Key.A, LetterMappings.LetterToSymbols['a']);
 
          LowLevelListener.KeyDown += new LowLevelListener.KeyHookEventHandler(e => Handler.HandleKeyPress(true, e));
          LowLevelListener.KeyUp += new LowLevelListener.KeyHookEventHandler(e => Handler.HandleKeyPress(false, e));

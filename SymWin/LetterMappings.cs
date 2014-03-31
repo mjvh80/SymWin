@@ -70,7 +70,7 @@ namespace SymWin
 
          foreach (var kvp in LetterToSymbols)
          {
-            LettersToWindow.Add(kvp.Key, new LetterSelector(kvp.Value));
+            LettersToWindow.Add(kvp.Key, new LetterSelector(LetterToKey(kvp.Key), kvp.Value));
          }
       }
    }

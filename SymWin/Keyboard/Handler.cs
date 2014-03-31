@@ -4,9 +4,13 @@
 
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace SymWin.Keyboard
 {
@@ -983,44 +987,83 @@ namespace SymWin.Keyboard
       [DllImport("user32.dll")]
       static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
 
+      [DllImport("USER32.dll")]
+      static extern short GetKeyState(VirtualKeyShort nVirtKey);
+
+      [DllImport("user32.dll")]
+      [return: MarshalAs(UnmanagedType.Bool)]
+      static extern bool GetKeyboardState(byte[] lpKeyState);
+
+      [DllImport("user32.dll")]
+      static extern bool SetKeyboardState(byte[] lpKeyState);
+
       #endregion
 
-      public static void SendInput()
+      /// <summary>
+      /// If the program is started with capslock already enabled, we'll always have capslock enabled.
+      /// This isn't what we want (probably).
+      /// </summary>
+      public static void ValidateCAPSLOCKState()
       {
-         var keyboardInput = new KEYBDINPUT();
-         keyboardInput.wVk = 0; // required by unicode event
-         keyboardInput.wScan = (Int16)'b'; // 'α'; // todo: unicode char
-         keyboardInput.dwFlags = KEYEVENTF.UNICODE;
-         keyboardInput.dwExtraInfo = GetMessageExtraInfo(); // UIntPtr.Zero;
-         keyboardInput.time = 0;
+         var buffer = new Byte[256];
+         if (GetKeyboardState(buffer))
+         {
+            if (buffer[(Int32)VirtualKeyShort.CAPITAL] == 1) // capslock is active
+            {
+               // Note: SetKeyboardState apparently only works for win95, so let's synthesize the key instead.
+               var keyboardInput = new KEYBDINPUT();
+               keyboardInput.wVk = VirtualKeyShort.CAPITAL;
+               keyboardInput.dwExtraInfo = GetMessageExtraInfo();
 
-         var keyDown = new INPUT();
-         keyDown.type = INPUT_KEYBOARD;
-         keyDown.U.ki = keyboardInput;
+               var keyDown = new INPUT();
+               keyDown.type = INPUT_KEYBOARD;
+               keyDown.U.ki = keyboardInput;
 
-         var keyUp = keyDown;
-         //  keyUp.U.ki.dwFlags |= KEYEVENTF.KEYUP;
-
-         var result = SendInput(1, new[] { keyDown, keyUp }, Marshal.SizeOf(keyDown)); // <= 0)
-
-         MessageBox.Show("Sent input: " + result);
+               // Attempt to disable capslock, tough if this fails.
+               SendInput(1, new[] { keyDown }, Marshal.SizeOf(keyDown));
+            }
+         }
       }
 
       private static IntPtr _sActiveKeyboardWindow;
       private static LetterSelector _sActiveSelectorWindow;
+      private static Stopwatch _sShiftTimer = Stopwatch.StartNew();
+      private const Int32 _kReleaseErrorMargin = 500; // millis
+
+      private static Boolean _IsLetterPress(Key key)
+      {
+         return key != Key.CapsLock && key != Key.LeftShift && key != Key.RightShift && key != Key.Left && key != Key.Right;
+      }
 
       public static Boolean HandleKeyPress(Boolean isDown, LowLevelListener.KeyHookEventArgs e)
       {
          // If we get here with a letter without our hotkey, exit pronto.
          if (e.Key != Key.CapsLock && !e.ModifierCapsLock) return false;
 
+         // Check if the letter has changed whilst the popup is showing, in this case we'll show another selector window.
+         if (_sActiveSelectorWindow != null && _IsLetterPress(e.Key))
+         {
+            if (_sActiveSelectorWindow.Key != e.Key)
+            {
+               var left = _sActiveSelectorWindow.Left;
+               var top = _sActiveSelectorWindow.Top;
+
+               _HidePopup();
+
+               if (!LetterMappings.LettersToWindow.TryGetValue(LetterMappings.KeyToLetter(e.Key), out _sActiveSelectorWindow))
+                  return false;
+
+               _ShowPopup(e.ModifierAnyShift, (Int32)left, (Int32)top);
+               return true;
+            }
+         }
+
          if (_sActiveSelectorWindow == null)
          {
             if (e.Key == Key.CapsLock)
                return true; // disable capslock
 
-            // if (e.Key != Key.Left && e.Key != Key.Right))
-            if (!LetterMappings.LettersToWindow.TryGetValue(LetterMappings.KeyToLetter(e.Key), out _sActiveSelectorWindow)) 
+            if (!LetterMappings.LettersToWindow.TryGetValue(LetterMappings.KeyToLetter(e.Key), out _sActiveSelectorWindow))
                return false;
          }
 
@@ -1035,7 +1078,10 @@ namespace SymWin.Keyboard
             if (selectorShowing)
             {
                if (isDown)
+               {
                   _sActiveSelectorWindow.ToUpper();
+                  _sShiftTimer.Restart();
+               }
                else
                   _sActiveSelectorWindow.ToLower();
             }
@@ -1065,9 +1111,9 @@ namespace SymWin.Keyboard
             var position = Caret.GetPosition();
 
             // Assume that if the position is 0, 0 there is no caret at that position.
-            // This happens if the shortcut is used in an application that is not showing an active
+            // This happens if the shortcut is used in an application that is not showiang an active
             // caret. It is unlikely we'd have a caret at that position.
-            if (position.X == 0 && position.Y == 0) 
+            if (position.X == 0 && position.Y == 0)
                return true; // still mark as handled though
 
             // Get the monitor on which we are and see if we need to adjust location to avoid falling off.
@@ -1087,11 +1133,7 @@ namespace SymWin.Keyboard
                }
             }
 
-            _sActiveSelectorWindow.Left = position.X;
-            _sActiveSelectorWindow.Top = position.Y;
-
-            _sActiveSelectorWindow.Visibility = Visibility.Visible;
-            _sActiveSelectorWindow.Activate();
+            _ShowPopup(e.ModifierAnyShift, position.X, position.Y);
             return true;
          }
 
@@ -1102,7 +1144,17 @@ namespace SymWin.Keyboard
          // If the selector is not showing, disable the activator key.
          if (!selectorShowing) return true;
 
-         _SendSelectedLetterAsKeyPress();
+         // Using the shift key is difficult because the user has to release many keys at once.
+         // Often the shift key is release slightly before the rest which causes the letters to be
+         // lower cased just before selecting. We allow a little time interval in which we ignore the shift up.
+         if (_sShiftTimer.ElapsedMilliseconds < _kReleaseErrorMargin)
+            _sActiveSelectorWindow.ToUpper();
+
+         // As with the shift key, if the alt key is pressed when the key is sent this really
+         // sends a alt+key shortcut combination to the target application. We allow for an error
+         // margin and delay the sending of input if alt is used (but not enough to be really noticable).
+         // Todo: instead send an alt up?
+         _SendSelectedLetterAsKeyPress(delayInput: e.ModifierAnyAlt);
          return true;
       }
 
@@ -1113,25 +1165,52 @@ namespace SymWin.Keyboard
          _SendSelectedLetterAsKeyPress();
       }
 
-      private static void _SendSelectedLetterAsKeyPress()
+      private static void _HidePopup()
       {
-         // At this point we're handling the key up without capslock.
+         _sActiveSelectorWindow.Visibility = Visibility.Hidden;
+         _sActiveSelectorWindow = null;
+      }
 
+      private static void _ShowPopup(Boolean isUpper, Int32 left, Int32 top)
+      {
+         _sActiveSelectorWindow.Left = left;
+         _sActiveSelectorWindow.Top = top;
+
+         // If the user had shift pressed before pressing letter, ensure to show upper case.
+         if (isUpper)
+            _sActiveSelectorWindow.ToUpper();
+         else
+            _sActiveSelectorWindow.ToLower();
+
+         _sActiveSelectorWindow.Visibility = Visibility.Visible;
+         _sActiveSelectorWindow.Activate();
+      }
+
+      private static void _SendSelectedLetterAsKeyPress(Boolean delayInput = false)
+      {
          var pos = Caret.GetPosition();
          var letter = _sActiveSelectorWindow.SelectedLetter;
 
-         _sActiveSelectorWindow.Visibility = Visibility.Hidden;
-         _sActiveSelectorWindow = null;
+         _HidePopup();
 
-         SetForegroundWindow(_sActiveKeyboardWindow);
-         //SetFocus(_mActiveKeyboardWindow);
+         try
+         {
+            if (!SetForegroundWindow(_sActiveKeyboardWindow))
+               // Something went wrong, ignore.
+               return;
+         }
+         catch (Win32Exception e)
+         {
+            // For reasons not yet understood we sometimes get a 0 error code turned into an exception (operation succeeded).
+            if (e.NativeErrorCode != 0)
+               return;
+         }
 
-         // Send "alpha" to the input app.
          var keyboardInput = new KEYBDINPUT();
          keyboardInput.wVk = 0; // required by unicode event
-         keyboardInput.wScan = (Int16)letter; // (Int16)'α'; // todo: unicode char
+         keyboardInput.wScan = (Int16)letter;
          keyboardInput.dwFlags = KEYEVENTF.UNICODE;
-         keyboardInput.dwExtraInfo = GetMessageExtraInfo(); // UIntPtr.Zero;
+         keyboardInput.dwExtraInfo = GetMessageExtraInfo();
          keyboardInput.time = 0;
 
          var keyDown = new INPUT();
@@ -1141,10 +1220,21 @@ namespace SymWin.Keyboard
          var keyUp = keyDown;
          keyUp.U.ki.dwFlags |= KEYEVENTF.KEYUP;
 
-         var result = SendInput(1, new[] { keyDown, keyUp }, Marshal.SizeOf(keyDown)); // <= 0)
+         // If an error happens here it's probably due to UIPI, i.e. the target application is of higher integrity.
+         // We ignore the error.
+         if (delayInput)
+            ThreadPool.QueueUserWorkItem(context =>
+               {
+                  // Just block for a bit.
+                  Thread.Sleep(_kReleaseErrorMargin);
 
-         if (result <= 0)
-            throw new Win32Exception(Marshal.GetLastWin32Error());
+                  ((SynchronizationContext)context).Post(_ =>
+                  {
+                     SendInput(1, new[] { keyDown, keyUp }, Marshal.SizeOf(keyDown));
+                  }, null);
+               }, SynchronizationContext.Current);
+         else
+            SendInput(1, new[] { keyDown, keyUp }, Marshal.SizeOf(keyDown));
       }
    }
 }

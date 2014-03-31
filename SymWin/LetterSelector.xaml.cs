@@ -18,7 +18,9 @@ namespace SymWin
    /// </summary>
    public partial class LetterSelector : Window
    {
-      public LetterSelector(params Char[] letters)
+      private readonly TextBox[] _mTextBoxes;
+
+      public LetterSelector(Key key, params Char[] letters)
       {
          if (letters == null || letters.Length == 0) throw new ArgumentException("Missing letters");
 
@@ -31,13 +33,14 @@ namespace SymWin
 
          var width = 0.0;
 
+         _mTextBoxes = new TextBox[letters.Length];
+
          // Add letters in order of appearance.
          for (var i = 0; i < letters.Length; i++ )
          {
             var letter = letters[i];
             var newLetter = Utils.CloneWPFObject(letterTemplate);
             
-
             // Todo: it seems our "clone" is not cloning events, so let's hook it here.
             newLetter.PreviewMouseUp += OnMouseUp;
 
@@ -63,68 +66,77 @@ namespace SymWin
 
             this.LetterPanel.Children.Add(newLetter);
 
+            _mTextBoxes[i] = newLetter;
             width += newLetter.Width;
          }
 
          // Restrict window size to panel width.
          this.Width = width;
          this.Height = letterTemplate.Height;
+         this.Key = key;
 
          this.Loaded += (_, __) => SelectNext();
       }
+
+      public readonly Key Key;
 
       public Char SelectedLetter
       {
          get
          {
-            return FindVisualChildren<TextBox>(this).ElementAt(_mActiveIndex).Text[0];
+            return _mTextBoxes[_mActiveIndex].Text[0];
          }
+      }
+
+      private Boolean _mIsLowerCase = true;
+
+      public void ToUpper()
+      {
+         if (!_mIsLowerCase) return;
+
+         // What about culture? (todo)
+         foreach (var textBox in _mTextBoxes)
+            textBox.Text = textBox.Text.ToUpper();
+
+         _mIsLowerCase = false;
+      }
+
+      public void ToLower()
+      {
+         if (_mIsLowerCase) return;
+
+         // What about culture? (todo)
+         foreach (var textBox in _mTextBoxes)
+            textBox.Text = textBox.Text.ToLower();
+
+         _mIsLowerCase = true;
       }
 
       private Int32 _mActiveIndex = -1;
 
       public void SelectNext()
       {
-         var letters = FindVisualChildren<TextBox>(this);
-         var count = letters.Count();
+         var count = _mTextBoxes.Length;
 
          _mActiveIndex = (_mActiveIndex + 1) % count;
 
-         letters.ElementAt(_mActiveIndex).Focus();
-      }
-
-      public void ToUpper()
-      {
-         // What about culture? (todo)
-         foreach (var textBox in EnumerateTextBoxes())
-            textBox.Text = textBox.Text.ToUpper();
-      }
-
-      public void ToLower()
-      {
-         // What about culture? (todo)
-         foreach (var textBox in EnumerateTextBoxes())
-            textBox.Text = textBox.Text.ToLower();
+         _mTextBoxes[_mActiveIndex].Focus();
       }
 
       public void SelectPrevious()
       {
-         var letters = FindVisualChildren<TextBox>(this);
-         var count = letters.Count();
+         var count = _mTextBoxes.Length;
 
          _mActiveIndex = (count + _mActiveIndex - 1) % count;
 
-         letters.ElementAt(_mActiveIndex).Focus();
+         _mTextBoxes[_mActiveIndex].Focus();
       }
 
       private void TextBox_TextChanged(Object sender, TextChangedEventArgs e)
       {
       }
 
-      private IEnumerable<TextBox> EnumerateTextBoxes()
-      {
-         return FindVisualChildren<TextBox>(this);
-      }
+#if  false
 
       public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
       {
@@ -146,6 +158,8 @@ namespace SymWin
          }
       }
 
+#endif
+
       private void OnWindowDeactivated(Object sender, EventArgs e)
       {
          this.Visibility = System.Windows.Visibility.Hidden;
@@ -155,7 +169,7 @@ namespace SymWin
       {
          var textBox = e.Source as TextBox;
          if (textBox == null) return;
-         _mActiveIndex = Array.IndexOf(EnumerateTextBoxes().ToArray(), textBox); // todo: avoid this nonsense
+         _mActiveIndex = Array.IndexOf(_mTextBoxes, textBox);
          textBox.Focus();
          Handler.HandleMouseUp();
       }
