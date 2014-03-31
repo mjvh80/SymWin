@@ -7,31 +7,30 @@ Inspired by Apple's iOS keyboard symbol selection, this shows a popup with symbo
 
 It looks like this:
 
-![screenshot](SymWin/screenshot.png)
+![screenshot](SymWin/screencast.gif)
+
+and 
+
+![screenshot](SymWin/screencast2.gif)
 
 To type a symbol hold down CAPSLOCK and then (say) the *a* key. This will show the above popup.
 
 To type an uppercase symbol, simply add SHIFT to the above key sequence.
 
-To cycle options keep pressing the letter key, or use the arrow keys on the keyboard. You can also use the mouse to select a symbol.
+To cycle options keep pressing the letter key, or use the arrow keys on the keyboard. You can also use the mouse to select a symbol. To go backwards, hold the ALT key in addition to the other keys.
 
 This is just an initial rough version which is working well in most applications.
 
-Things I'd like to do:
-----------------------
+Things I may like to do / add
+-----------------------------
 
+- figure out the best way to run in the background with enough privileges to avoid UAC popups or run into UIPI windows issues
 - dogfooding / bug fixing / remove rough edges
 - the code can be optimized
 - make "hot key" (currently CAPSLOCK) configurable
 - how to deal with various cultures
-- deal with popup showing outside of screen boundaries
-- investigate why it does not work in Visual Studio
 - add tasktray support
 - add support for configuring symbols (via tasktray settings menu)
-
-Things that may be nice but I'm not sure about:
------------------------------------------------
-
 - dynamically re-order symbols based on usage patterns (e.g. more frequently used symobls are faster to get to)
 
 Finally
