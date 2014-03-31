@@ -50,8 +50,8 @@ namespace SymWin
          LetterMappings.InitializeWindows();
 
          // Register keys.
-         foreach (var letter in LetterMappings.LetterToSymbols.Keys)
-            LowLevelListener.HookedKeys.Add(LetterMappings.LetterToKey(letter));
+         foreach (var letter in LetterMappings.KeysToSymbols.Keys)
+            LowLevelListener.HookedKeys.Add(letter);
 
          // Hook left, right arrow keys to move the selector.
          LowLevelListener.HookedKeys.Add(Key.Left);
@@ -63,7 +63,7 @@ namespace SymWin
          LowLevelListener.HookedKeys.Add(Key.RightShift);
          LowLevelListener.Register();
 
-         Selector = new LetterSelector(Key.A, LetterMappings.LetterToSymbols['a']);
+         Selector = new LetterSelector(Key.A, LetterMappings.KeysToSymbols[Key.A]);
 
          LowLevelListener.KeyDown += new LowLevelListener.KeyHookEventHandler(e => Handler.HandleKeyPress(true, e));
          LowLevelListener.KeyUp += new LowLevelListener.KeyHookEventHandler(e => Handler.HandleKeyPress(false, e));

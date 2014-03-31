@@ -1050,7 +1050,7 @@ namespace SymWin.Keyboard
 
                _HidePopup();
 
-               if (!LetterMappings.LettersToWindow.TryGetValue(LetterMappings.KeyToLetter(e.Key), out _sActiveSelectorWindow))
+               if (!LetterMappings.KeyToWindowMap.TryGetValue(e.Key, out _sActiveSelectorWindow))
                   return false;
 
                _ShowPopup(e.ModifierAnyShift, (Int32)left, (Int32)top);
@@ -1063,7 +1063,7 @@ namespace SymWin.Keyboard
             if (e.Key == Key.CapsLock)
                return true; // disable capslock
 
-            if (!LetterMappings.LettersToWindow.TryGetValue(LetterMappings.KeyToLetter(e.Key), out _sActiveSelectorWindow))
+            if (!LetterMappings.KeyToWindowMap.TryGetValue(e.Key, out _sActiveSelectorWindow))
                return false;
          }
 
@@ -1108,7 +1108,7 @@ namespace SymWin.Keyboard
          {
             _sActiveKeyboardWindow = GetForegroundWindow();
 
-            var position = Caret.GetPosition();
+            var position = Caret.GetPosition(_sActiveKeyboardWindow);
 
             // Assume that if the position is 0, 0 there is no caret at that position.
             // This happens if the shortcut is used in an application that is not showiang an active
@@ -1188,7 +1188,7 @@ namespace SymWin.Keyboard
 
       private static void _SendSelectedLetterAsKeyPress(Boolean delayInput = false)
       {
-         var pos = Caret.GetPosition();
+         var pos = Caret.GetPosition(_sActiveKeyboardWindow);
          var letter = _sActiveSelectorWindow.SelectedLetter;
 
          _HidePopup();

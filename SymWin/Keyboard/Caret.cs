@@ -45,12 +45,31 @@ namespace SymWin.Keyboard
       [DllImport("user32.dll")]
       private static extern Boolean GetGUIThreadInfo(UInt32 idThread, out GUITHREADINFO lpgui);
 
+      [DllImport("user32.dll")]
+      static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr ProcessId);
+
       // Based on http://www.codeproject.com/Articles/34520/Getting-Caret-Position-Inside-Any-Application.
-      public static Point GetPosition()
+      public static Point GetPosition(IntPtr window)
       {
          GUITHREADINFO info = new GUITHREADINFO();
          info.cbSize = (UInt32)Marshal.SizeOf(info);
          GetGUIThreadInfo(0, out info);
+
+         /*
+         var caret = info.rcCaret;
+         if (caret.Left == 0 && caret.Bottom == 0)
+         {
+            // Try again using a more specific thread id.
+            var threadId = GetWindowThreadProcessId(window, IntPtr.Zero);
+            GetGUIThreadInfo(threadId, out info);
+            caret = info.rcCaret;
+         }
+         if (caret.Left == 0 && caret.Bottom == 0)
+         {
+            Point point;
+            GetCaretPos(out point);
+         }
+          * */
 
          Point caretPos;
          caretPos.X = info.rcCaret.Left;
