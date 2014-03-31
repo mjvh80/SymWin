@@ -9,10 +9,6 @@ It looks like this:
 
 ![screenshot](SymWin/screencast.gif)
 
-and 
-
-![screenshot](SymWin/screencast2.gif)
-
 To type a symbol hold down CAPSLOCK and then (say) the *a* key. This will show the above popup.
 
 To type an uppercase symbol, simply add SHIFT to the above key sequence.
@@ -21,17 +17,15 @@ To cycle options keep pressing the letter key, or use the arrow keys on the keyb
 
 This is just an initial rough version which is working well in most applications.
 
-Things I may like to do / add
------------------------------
+Todo:
+-----
 
-- figure out the best way to run in the background with enough privileges to avoid UAC popups or run into UIPI windows issues
-- dogfooding / bug fixing / remove rough edges
-- the code can be optimized
-- make "hot key" (currently CAPSLOCK) configurable
+- (perhaps) figure out the best way to run in the background with enough privileges to avoid UAC popups or run into UIPI windows issues - this isn't required to use this tool but it'd make it more generally available
+- (perhaps) make "hot key" (currently CAPSLOCK) configurable
 - how to deal with various cultures
-- add tasktray support
-- add support for configuring symbols (via tasktray settings menu)
-- dynamically re-order symbols based on usage patterns (e.g. more frequently used symobls are faster to get to)
+- add tasktray support to easily enable/disable and/or quit
+- (perhaps) add support for configuring symbols (via tasktray settings menu)
+- (perhaps) dynamically re-order symbols based on usage patterns (e.g. more frequently used symobls are faster to get to)
 
 Finally
 -------
