@@ -23,7 +23,6 @@ Todo:
 - (perhaps) figure out the best way to run in the background with enough privileges to avoid UAC popups or run into UIPI windows issues - this isn't required to use this tool but it'd make it more generally available
 - (perhaps) make "hot key" (currently CAPSLOCK) configurable
 - how to deal with various cultures
-- add tasktray support to easily enable/disable and/or quit
 - (perhaps) add support for configuring symbols (via tasktray settings menu)
 - (perhaps) dynamically re-order symbols based on usage patterns (e.g. more frequently used symobls are faster to get to)
 
