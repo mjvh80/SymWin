@@ -6,6 +6,7 @@ using SymWin.Keyboard;
 using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace SymWin
@@ -73,6 +74,29 @@ namespace SymWin
       {
          Selector.Show();
          Selector.SelectNext();
+      }
+
+      private void OnTaskTrayDisable(Object sender, RoutedEventArgs e) 
+      {
+         var item = (MenuItem)sender;
+         var enable = item.Header.Equals("Enable");
+
+         if (enable)
+            item.Header = "Disable";
+         else
+            item.Header = "Enable";
+
+         Handler.Enable(enable);
+      }
+
+      private void OnTaskTrayQuit(Object sender, RoutedEventArgs e) 
+      {
+         Environment.Exit(0);
+      }
+
+      private void OnConfigureClick(Object sender, RoutedEventArgs e)
+      {
+         new Configure().Show();
       }
    }
 }

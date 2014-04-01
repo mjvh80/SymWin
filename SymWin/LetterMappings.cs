@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace SymWin
 {
-   internal static class LetterMappings
+   public static class LetterMappings
    {
       public static readonly Dictionary<Key, Char[]> KeysToSymbols = new Dictionary<Key, Char[]>
       {
@@ -62,6 +62,12 @@ namespace SymWin
          { Key.OemPlus, new[] { '≈', '≠' }},
 
       };
+
+      public static void UpdateKey(Key key, Char[] letters)
+      {
+         KeysToSymbols[key] = letters;
+         KeyToWindowMap[key] = new LetterSelector(key, letters);
+      }
 
       public static Dictionary<Key, LetterSelector> KeyToWindowMap { get; private set; }
 

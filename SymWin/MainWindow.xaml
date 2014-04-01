@@ -1,10 +1,21 @@
 ﻿<Window x:Class="SymWin.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         Title="MainWindow" Height="350" Width="525">
    <Grid>
       <TextBox HorizontalAlignment="Left" Height="46" Margin="108,122,0,0" TextWrapping="Wrap" Text="Foo is the new Bar" VerticalAlignment="Top" Width="248" FontSize="16"/>
       <Button Content="Button" HorizontalAlignment="Left" Margin="117,235,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-
+      <Button Content="Configure" Click="OnConfigureClick"  Margin="218,235,192,43" />
+      <tb:TaskbarIcon
+         IconSource="pack://application:,,,/Resources/tasktray.ico"
+         ToolTipText="SymWin Symbol Support">
+         <tb:TaskbarIcon.ContextMenu>
+            <ContextMenu>
+               <MenuItem Header="Disable" Click="OnTaskTrayDisable" />
+               <MenuItem Header="Quit" Click="OnTaskTrayQuit" />
+            </ContextMenu>
+         </tb:TaskbarIcon.ContextMenu>
+      </tb:TaskbarIcon>
    </Grid>
 </Window>

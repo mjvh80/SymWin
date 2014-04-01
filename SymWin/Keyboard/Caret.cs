@@ -40,6 +40,18 @@ namespace SymWin.Keyboard
       private static extern Boolean GetCaretPos(out Point point);
 
       [DllImport("user32.dll")]
+      private static extern Boolean CreateCaret(IntPtr window, IntPtr bitmap, Int32 width, Int32 height);
+
+      [DllImport("user32.dll")]
+      private static extern Boolean DestroyCaret();
+
+      [DllImport("user32.dll")]
+      private static extern Boolean SetCaretPos(Int32 x, Int32 y);
+
+      [DllImport("user32.dll")]
+      private static extern Boolean ShowCaret(IntPtr window);
+
+      [DllImport("user32.dll")]
       static extern Boolean ClientToScreen(IntPtr hWnd, ref Point lpPoint);
 
       [DllImport("user32.dll")]
@@ -48,6 +60,15 @@ namespace SymWin.Keyboard
       [DllImport("user32.dll")]
       static extern uint GetWindowThreadProcessId(IntPtr hWnd, IntPtr ProcessId);
 
+      [DllImport("kernel32.dll")]
+      static extern uint GetCurrentThreadId();
+
+      [DllImport("user32.dll")]
+      static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
+
+      [DllImport("user32.dll")]
+      static extern IntPtr GetFocus();
+
       // Based on http://www.codeproject.com/Articles/34520/Getting-Caret-Position-Inside-Any-Application.
       public static Point GetPosition(IntPtr window)
       {
@@ -55,21 +76,33 @@ namespace SymWin.Keyboard
          info.cbSize = (UInt32)Marshal.SizeOf(info);
          GetGUIThreadInfo(0, out info);
 
-         /*
-         var caret = info.rcCaret;
-         if (caret.Left == 0 && caret.Bottom == 0)
-         {
-            // Try again using a more specific thread id.
-            var threadId = GetWindowThreadProcessId(window, IntPtr.Zero);
-            GetGUIThreadInfo(threadId, out info);
-            caret = info.rcCaret;
-         }
-         if (caret.Left == 0 && caret.Bottom == 0)
-         {
-            Point point;
-            GetCaretPos(out point);
-         }
-          * */
+         //var caret = info.rcCaret;
+         //if (caret.Left == 0 && caret.Bottom == 0)
+         //{
+         //   // Try again using a more specific thread id.
+         //   var curThreadId = GetCurrentThreadId();
+         //   var threadId = GetWindowThreadProcessId(window, IntPtr.Zero);
+         //   var b1 = AttachThreadInput(curThreadId, threadId, true);
+
+
+
+         //   var focus = GetFocus();
+
+         //   var b3 = CreateCaret(window, IntPtr.Zero, 0, 0);
+         //   var b5 = ShowCaret(window);
+
+         //   //var b2 = GetGUIThreadInfo(threadId, out info);
+         //   //caret = info.rcCaret;
+
+         //   SetCaretPos(100, 100);
+
+         //   Point point;
+         //   GetCaretPos(out point);
+
+         //   var b4 = DestroyCaret();
+
+         //   AttachThreadInput(curThreadId, threadId, false);
+         //}
 
          Point caretPos;
          caretPos.X = info.rcCaret.Left;

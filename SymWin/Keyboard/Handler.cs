@@ -985,6 +985,9 @@ namespace SymWin.Keyboard
       private static extern IntPtr MonitorFromPoint(Point p, Int32 flags);
 
       [DllImport("user32.dll")]
+      private static extern IntPtr MonitorFromWindow(IntPtr window, Int32 flags);
+
+      [DllImport("user32.dll")]
       static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
 
       [DllImport("USER32.dll")]
@@ -998,6 +1001,16 @@ namespace SymWin.Keyboard
       static extern bool SetKeyboardState(byte[] lpKeyState);
 
       #endregion
+
+      public static void Enable(Boolean yes)
+      {
+         if (yes)
+            ValidateCAPSLOCKState();
+         else
+            _HidePopup();
+
+         _sEnabled = yes;
+      }
 
       /// <summary>
       /// If the program is started with capslock already enabled, we'll always have capslock enabled.
@@ -1025,6 +1038,7 @@ namespace SymWin.Keyboard
          }
       }
 
+      private static Boolean _sEnabled = true;
       private static IntPtr _sActiveKeyboardWindow;
       private static LetterSelector _sActiveSelectorWindow;
       private static Stopwatch _sShiftTimer = Stopwatch.StartNew();
@@ -1037,6 +1051,8 @@ namespace SymWin.Keyboard
 
       public static Boolean HandleKeyPress(Boolean isDown, LowLevelListener.KeyHookEventArgs e)
       {
+         if (!_sEnabled) return false;
+
          // If we get here with a letter without our hotkey, exit pronto.
          if (e.Key != Key.CapsLock && !e.ModifierCapsLock) return false;
 
@@ -1110,14 +1126,13 @@ namespace SymWin.Keyboard
 
             var position = Caret.GetPosition(_sActiveKeyboardWindow);
 
-            // Assume that if the position is 0, 0 there is no caret at that position.
-            // This happens if the shortcut is used in an application that is not showiang an active
-            // caret. It is unlikely we'd have a caret at that position.
-            if (position.X == 0 && position.Y == 0)
-               return true; // still mark as handled though
-
             // Get the monitor on which we are and see if we need to adjust location to avoid falling off.
-            var monitor = MonitorFromPoint(position, MONITOR_DEFAULTTONEAREST);
+            IntPtr monitor;
+            if (position.X == 0 && position.Y == 0)
+               monitor = MonitorFromWindow(_sActiveKeyboardWindow, MONITOR_DEFAULTTONEAREST);
+            else
+               monitor = MonitorFromPoint(position, MONITOR_DEFAULTTONEAREST);
+
             if (monitor != IntPtr.Zero)
             {
                // Get monitor size.
@@ -1125,6 +1140,16 @@ namespace SymWin.Keyboard
                info.cbSize = Marshal.SizeOf(info);
                if (GetMonitorInfo(monitor, ref info))
                {
+                  if (position.X == 0 && position.Y == 0)
+                  {
+                     // This can happen in two cases:
+                     // - there is no caret
+                     // - the application does not use win32 caret api
+                     // Slap the popup in the middle of the screen as workaround for now.
+                     position.X = info.rcWork.Left + (info.rcWork.Right - info.rcWork.Left) / 2 - (Int32)(_sActiveSelectorWindow.ActualWidth / 2.0);
+                     position.Y = info.rcWork.Top + (info.rcWork.Bottom - info.rcWork.Top) / 2 - (Int32)(_sActiveSelectorWindow.ActualHeight / 2.0);
+                  }
+                  
                   // Adjust position to fit within the given dimensions.
                   if (position.X + _sActiveSelectorWindow.ActualWidth > info.rcWork.Right)
                      position.X = info.rcWork.Right - (Int32)_sActiveSelectorWindow.ActualWidth;
@@ -1132,6 +1157,10 @@ namespace SymWin.Keyboard
                      position.Y = info.rcWork.Bottom - (Int32)_sActiveSelectorWindow.ActualHeight;
                }
             }
+
+            // If we got nowhere reasonable to put the popup, mark as handled and don't show it.
+            if (position.X == 0 && position.Y == 0)
+               return true;
 
             _ShowPopup(e.ModifierAnyShift, position.X, position.Y);
             return true;
@@ -1167,6 +1196,8 @@ namespace SymWin.Keyboard
 
       private static void _HidePopup()
       {
+         if (_sActiveSelectorWindow == null) return;
+
          _sActiveSelectorWindow.Visibility = Visibility.Hidden;
          _sActiveSelectorWindow = null;
       }
