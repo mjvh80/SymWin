@@ -12,6 +12,7 @@
          ToolTipText="SymWin Symbol Support">
          <tb:TaskbarIcon.ContextMenu>
             <ContextMenu>
+               <MenuItem Header="Configure Symbols" Click="OnConfigureClick" />
                <MenuItem Header="Disable" Click="OnTaskTrayDisable" />
                <MenuItem Header="Quit" Click="OnTaskTrayQuit" />
             </ContextMenu>

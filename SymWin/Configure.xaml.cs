@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿/*
+ * © Marcus van Houdt 2014
+ */
+
+using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace SymWin
 {
@@ -24,19 +20,75 @@ namespace SymWin
          InitializeComponent();
       }
 
+      private void _Error(String msg)
+      {
+         Message.Text = msg;
+         Message.Style = (Style)this.Resources["MessageError"];
+      }
+
+      private void _Ok(String msg)
+      {
+         Message.Text = msg;
+         Message.Style = (Style)this.Resources["MessageOk"];
+      }
+
+      private void _Status(String msg)
+      {
+         Message.Text = msg;
+         Message.Style = (Style)this.Resources["MessageStatus"];
+      }
+
+      private void OnClosing(Object s, CancelEventArgs e)
+      {
+         // Hide the window instead, and cancel closing.
+         this.Visibility = System.Windows.Visibility.Hidden;
+         e.Cancel = true;
+      }
+
+      private void OnConfigureAutoComplete(Object s, TextCompositionEventArgs e)
+      {
+         // This is crude, could be better.
+         var box = (ComboBox)s;
+         foreach(Key key in box.Items)
+            if (key.ToString().StartsWith(e.Text, StringComparison.OrdinalIgnoreCase))
+            {
+               box.SelectedItem = key;
+               break;
+            }
+      }
+
       private void OnConfigureSelectionChanged(Object s, RoutedEventArgs e)
       {
          var key = (Key)Enum.Parse(typeof(Key), Key.SelectedValue.ToString());
          var letters = LetterMappings.KeysToSymbols[key];
-         Letters.Text = new String(letters);
+
+         LowerCaseLetters.Style = UpperCaseLetters.Style = (Style)this.Resources["Selected"];
+
+         LowerCaseLetters.Text = new String(letters.Item1);
+         UpperCaseLetters.Text = new String(letters.Item2);
       }
 
       private void OnConfigureSave(Object s, RoutedEventArgs e)
       {
          var key = (Key)Enum.Parse(typeof(Key), Key.SelectedValue.ToString());
-         var letters = Letters.Text.ToCharArray();
 
-         LetterMappings.UpdateKey(key, letters);
+         var lowerCase = LowerCaseLetters.Text.ToCharArray();
+         var upperCase = UpperCaseLetters.Text.ToCharArray();
+
+         if (lowerCase.Length != upperCase.Length)
+         {
+            _Error("Lower and upper case should contain an equal amount of symbols.");
+            return;
+         }
+
+         if (lowerCase.Length == 0)
+         {
+            _Error("Enter at least one symbol.");
+            return;
+         }
+
+         LetterMappings.UpdateKey(key, lowerCase, upperCase);
+         _Ok("Saved!");
       }
    }
 }

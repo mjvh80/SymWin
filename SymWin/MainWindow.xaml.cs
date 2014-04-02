@@ -24,6 +24,7 @@ namespace SymWin
 
          var showWindow = false;
          
+         // Parse command line args.
          foreach (var arg in args.Skip(1))
          {
             switch (arg)
@@ -46,9 +47,10 @@ namespace SymWin
 
          InitializeComponent();
 
+         // Hook keyboard events.
          Handler.ValidateCAPSLOCKState();
 
-         LetterMappings.InitializeWindows();
+         LetterMappings.InitializeWindowsAndBindings();
 
          // Register keys.
          foreach (var letter in LetterMappings.KeysToSymbols.Keys)
@@ -94,9 +96,11 @@ namespace SymWin
          Environment.Exit(0);
       }
 
+      private static Configure _sConfigureWindow;
+
       private void OnConfigureClick(Object sender, RoutedEventArgs e)
       {
-         new Configure().Show();
+         (_sConfigureWindow ?? (_sConfigureWindow = new Configure())).Show();
       }
    }
 }

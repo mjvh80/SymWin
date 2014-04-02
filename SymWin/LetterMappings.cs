@@ -1,72 +1,77 @@
-﻿using System;
-using System.Collections.Generic;
-/*
+﻿/*
  * © Marcus van Houdt 2014
  */
 
+using System;
+using System.Collections.Generic;
 using System.Windows.Input;
+using System.Xml;
 
 namespace SymWin
 {
    public static class LetterMappings
    {
-      public static readonly Dictionary<Key, Char[]> KeysToSymbols = new Dictionary<Key, Char[]>
+      public static readonly Dictionary<Key, Tuple<Char[], Char[]>> KeysToSymbols = new Dictionary<Key, Tuple<Char[], Char[]>>
       {
          // todo: different symbols for caps, e.g. Ð ?
 
          // Initial rough mapping for letters, not too much thought has gone into this yet.
 
-         { Key.A, new[] { 'ä', 'å', 'à', 'á', 'α', 'æ' }},
-         { Key.B, new[] { 'β' }},
-         { Key.C, new[] { 'ç', 'γ', '©' }},
-         { Key.D, new[] { 'Þ', 'ð', 'δ' }},
-         { Key.E, new[] { 'ë', 'è', 'é', 'ê', 'ε', 'η' }},
-         { Key.F, new[] { 'ƒ', 'θ' }},
-         // { 'g', new[] { '' }}
+         { Key.A, Tuple.Create(new[] { 'ä', 'å', 'à', 'á', 'α', 'æ' }, new[] { 'Ä', 'Å', 'À', 'Á', 'א', 'Æ' })},
+         { Key.B, Tuple.Create(new[] { 'β' }, new[] { 'β' })},
+         { Key.C, Tuple.Create(new[] { 'ç', 'γ', '©' }, new[] { 'Ç', 'Γ', '©' })},
+         { Key.D, Tuple.Create(new[] { 'Þ', 'ð', 'δ' }, new[] { 'Þ', 'Ð', 'Δ' })},
+         { Key.E, Tuple.Create(new[] { 'ë', 'è', 'é', 'ê', 'ε', 'η' }, new[] { 'Ë', 'È', 'É', 'Ê', 'Ε', 'Η' })},
+         { Key.F, Tuple.Create(new[] { 'ƒ', 'θ' }, new[] { 'Ƒ', 'Θ' })},
+         // { 'g', new[] { '' })}
          // h -> astro h?
-         { Key.I, new[] { 'ì', 'í', 'î', 'ï', 'ι' }},
+         { Key.I, Tuple.Create(new[] { 'ì', 'í', 'î', 'ï', 'ι' }, new[] { 'Ì', 'Í', 'Î', 'Ï', 'Ι' })},
          // j
-         { Key.L, new[] { 'λ' }},
-         { Key.M, new[] { 'µ' }},
-         { Key.K, new[] { 'κ' }},
-         { Key.N, new[] { 'ñ', 'ν' }},
-         { Key.O, new[] { 'ö', 'ò', 'ó', 'ô', 'õ', 'ø' }},
-         { Key.P, new[] { 'π', '¶' }},
-         // { 'q', new[] {} },
-         { Key.R, new[] { '®', 'ρ' }},
-         { Key.S, new[] { 'ß', 'š', 'σ' }},
-         { Key.T, new[] { 'τ', '™' }},
-         { Key.U, new[] { 'ù', 'ú', 'û', 'ü' }},
-         // { 'v', new[] {}},
-         { Key.W, new[] { 'ω' }},
-         { Key.X, new[] { 'χ', '×' }},
-         { Key.Y, new[] { 'ý', 'ÿ'}},
-         { Key.Z, new[] { 'ζ' }},
+         { Key.L, Tuple.Create(new[] { 'λ' }, new[] { 'Λ' })},
+         { Key.M, Tuple.Create(new[] { 'µ' }, new[] { 'µ' })},
+         { Key.K, Tuple.Create(new[] { 'κ' }, new[] { 'κ' })},
+         { Key.N, Tuple.Create(new[] { 'ñ', 'ν' }, new[] { 'Ñ', 'ν' })},
+         { Key.O, Tuple.Create(new[] { 'ö', 'ò', 'ó', 'ô', 'õ', 'ø' }, new[] { 'Ö', 'Ò', 'Ó', 'Ô', 'Õ', 'Ø' })},
+         { Key.P, Tuple.Create(new[] { 'π', '¶' }, new[] { 'Π', '¶' })},
+         // { 'q',Tuple.Create( new[] {} },
+         { Key.R, Tuple.Create(new[] { '®', 'ρ' }, new[] { '®', 'Ρ' })},
+         { Key.S, Tuple.Create(new[] { 'ß', 'š', 'σ' }, new[] { 'ß', 'Š', 'Σ' })},
+         { Key.T, Tuple.Create(new[] { 'τ', '™' }, new[] { 'τ', '™' })},
+         { Key.U, Tuple.Create(new[] { 'ù', 'ú', 'û', 'ü' }, new[] { 'Ù', 'Ú', 'Û', 'Ü' })},
+         // { 'v',Tuple.Create( new[] {})},
+         { Key.W, Tuple.Create(new[] { 'ω' }, new[] { 'Ω' })},
+         { Key.X, Tuple.Create(new[] { 'χ', '×' }, new[] { 'χ', '×' })},
+         { Key.Y, Tuple.Create(new[] { 'ý', 'ÿ'}, new[] { 'Ý', 'Ÿ'})},
+         { Key.Z, Tuple.Create(new[] { 'ζ' }, new[] { 'ζ' })},
 
          // Numbers
-         { Key.D0, new[]  { '☺', '☻', '∞', 'ø' }},
-         { Key.D1, new[] { '¡', '‼', '¹' }},
-         { Key.D2, new[] { '²', '½', '√' }},
-         { Key.D3, new[] { '³', '§' }},
-         { Key.D4, new[] { '£', '¥', '$', '¤' }},
-         { Key.D5, new[] { '‰', '♫', '♪' }},
-         { Key.D8, new[] { '★', '✼', '❀' }},
+         { Key.D0, Tuple.Create(new[]  { '☺', '☻', '∞', 'ø' }, new[]  { '☺', '☻', '∞', 'Ø' })},
+         { Key.D1, Tuple.Create(new[] { '¡', '‼', '¹' }, new[] { '¡', '‼', '¹' })},
+         { Key.D2, Tuple.Create(new[] { '²', '½', '√' }, new[] { '²', '½', '√' })},
+         { Key.D3, Tuple.Create(new[] { '³', '§' }, new[] { '³', '§' })},
+         { Key.D4, Tuple.Create(new[] { '£', '¥', '$', '€', '¤' }, new[] { '£', '¥', '$', '€', '¤' })},
+         { Key.D5, Tuple.Create(new[] { '‰', '♫', '♪' }, new[] { '‰', '♫', '♪' })},
+         { Key.D8, Tuple.Create(new[] { '★', '✼', '❀' }, new[] { '★', '✼', '❀' })},
+                   
+         { Key.D9, Tuple.Create(new[] { '☹' }, new[] { '☹' })},
+         { Key.OemCloseBrackets, Tuple.Create(new[] { '☹' }, new[] { '☹' })},
 
-         { Key.D9, new[] { '☹' }},
-         { Key.OemCloseBrackets, new[] { '☹' }},
-
-         { Key.Divide, new[]  {'÷'}},
-         { Key.OemQuotes, new[] { '«', '»'}},
-         { Key.OemPeriod, new[]  { '…', '∙', '●', '≤'}},
-         { Key.OemComma, new[] { '≥' }},
-         { Key.OemPlus, new[] { '≈', '≠' }},
+         { Key.Divide, Tuple.Create(new[]  {'÷'}, new[]  {'÷'})},
+         { Key.OemQuotes, Tuple.Create(new[] { '«', '»'}, new[] { '«', '»'})},
+         { Key.OemPeriod, Tuple.Create(new[]  { '…', '∙', '●', '≤'}, new[]  { '…', '∙', '●', '≤'})},
+         { Key.OemComma,  Tuple.Create(new[] { '≥' }, new[] { '≥' })},
+         { Key.OemPlus,   Tuple.Create(new[] { '≈', '≠' }, new[] { '≈', '≠' })},
 
       };
 
-      public static void UpdateKey(Key key, Char[] letters)
+      public static void UpdateKey(Key key, Char[] lowerCase, Char[] upperCase)
       {
-         KeysToSymbols[key] = letters;
-         KeyToWindowMap[key] = new LetterSelector(key, letters);
+         if (lowerCase.Length != upperCase.Length) throw new ArgumentException("lower and upper case letter arrays must be of equal length");
+         var pair = Tuple.Create(lowerCase, upperCase);
+         KeysToSymbols[key] = pair;
+         KeyToWindowMap[key] = new LetterSelector(key, pair);
+
+         _UpdateCustomKeyBindings();
       }
 
       public static Dictionary<Key, LetterSelector> KeyToWindowMap { get; private set; }
@@ -74,14 +79,64 @@ namespace SymWin
       /// <summary>
       /// Constructs a popup window for each of the letter mappings.
       /// </summary>
-      public static void InitializeWindows()
+      public static void InitializeWindowsAndBindings()
       {
+         // Let's check if we got custom definitions for key bindings.
+         _LoadCustomKeyBindings();
+
          KeyToWindowMap = new Dictionary<Key, LetterSelector>();
 
          foreach (var kvp in KeysToSymbols)
          {
-            KeyToWindowMap.Add(kvp.Key, new LetterSelector(kvp.Key, kvp.Value));
+            KeyToWindowMap.Add(kvp.Key, new LetterSelector(kvp.Key, kvp.Value)); ;
          }
+      }
+
+      private static void _LoadCustomKeyBindings()
+      {
+         var bindingsStr = Properties.Settings.Default.KeyBindings;
+         if (String.IsNullOrEmpty(bindingsStr)) return;
+
+         var bindings = new XmlDocument();
+         bindings.LoadXml(bindingsStr);
+
+         try
+         {
+            foreach (XmlElement binding in bindings.SelectNodes("/bindings/binding"))
+            {
+               var key = (Key)Enum.Parse(typeof(Key), binding.GetAttribute("key"));
+               var lcase = binding.GetAttribute("lower-case").ToCharArray();
+               var ucase = binding.GetAttribute("upper-case").ToCharArray();
+
+               if (lcase.Length != ucase.Length || lcase.Length == 0)
+                  continue;
+
+               if (KeysToSymbols.ContainsKey(key))
+                  KeysToSymbols[key] = Tuple.Create(lcase, ucase);
+            }
+         }
+         catch
+         {
+            return;
+         }
+      }
+
+      private static void _UpdateCustomKeyBindings()
+      {
+         var doc = new XmlDocument();
+         doc.LoadXml("<bindings />");
+
+         foreach (var kvp in KeysToSymbols)
+         {
+            var binding = doc.CreateElement("binding");
+            binding.SetAttribute("key", kvp.Key.ToString());
+            binding.SetAttribute("lower-case", new String(kvp.Value.Item1));
+            binding.SetAttribute("upper-case", new String(kvp.Value.Item2));
+            doc.DocumentElement.AppendChild(binding);
+         }
+
+         Properties.Settings.Default.KeyBindings = doc.OuterXml;
+         Properties.Settings.Default.Save();
       }
    }
 }

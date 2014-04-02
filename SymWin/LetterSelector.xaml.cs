@@ -4,12 +4,10 @@
 
 using SymWin.Keyboard;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace SymWin
 {
@@ -19,10 +17,13 @@ namespace SymWin
    public partial class LetterSelector : Window
    {
       private readonly TextBox[] _mTextBoxes;
+      private Tuple<Char[], Char[]> _mLetters;
 
-      public LetterSelector(Key key, params Char[] letters)
+      public LetterSelector(Key key, Tuple<Char[], Char[]> letters)
       {
-         if (letters == null || letters.Length == 0) throw new ArgumentException("Missing letters");
+         if (letters == null) throw new ArgumentNullException("letters");
+         if (letters.Item1.Length == 0 || letters.Item1.Length != letters.Item2.Length)
+            throw new ArgumentException("Invalid letter definition (empty or unequal lengths).");
 
          InitializeComponent();
 
@@ -33,42 +34,41 @@ namespace SymWin
 
          var width = 0.0;
 
-         _mTextBoxes = new TextBox[letters.Length];
+         _mTextBoxes = new TextBox[letters.Item1.Length];
 
          // Add letters in order of appearance.
-         for (var i = 0; i < letters.Length; i++ )
+         for (var i = 0; i < letters.Item1.Length; i++)
          {
-            var letter = letters[i];
+            var letter = letters.Item1[i];
             var newLetter = Utils.CloneWPFObject(letterTemplate);
-            
+
             // Todo: it seems our "clone" is not cloning events, so let's hook it here.
             newLetter.PreviewMouseUp += OnMouseUp;
-
-            // I'd like to hide these, but it's not working.
-            // newLetter.ToolTip = new ToolTip() { Visibility = System.Windows.Visibility.Hidden };
 
             // Adjust border thickness. It'd be nice if we can (?) do this in xaml using style ala css pseudo selectors
             var borderThick = newLetter.BorderThickness;
             borderThick.Left = borderThick.Right = 1;
             if (i == 0)
             {
-               borderThick.Right = letters.Length > 1 ? 1 : 2;
+               borderThick.Right = letters.Item1.Length > 1 ? 1 : 2;
                borderThick.Left = 2;
             }
-            else if (i == letters.Length - 1)
+            else if (i == letters.Item1.Length - 1)
             {
-               borderThick.Left = letters.Length > 1 ? 1 : 2;
+               borderThick.Left = letters.Item1.Length > 1 ? 1 : 2;
                borderThick.Right = 2;
             }
             newLetter.BorderThickness = borderThick;
 
-            newLetter.Text = letter.ToString(); // todo: culture?
+            newLetter.Text = letter.ToString();
 
             this.LetterPanel.Children.Add(newLetter);
 
             _mTextBoxes[i] = newLetter;
             width += newLetter.Width;
          }
+
+         this._mLetters = letters;
 
          // Restrict window size to panel width.
          this.Width = width;
@@ -94,9 +94,8 @@ namespace SymWin
       {
          if (!_mIsLowerCase) return;
 
-         // What about culture? (todo)
-         foreach (var textBox in _mTextBoxes)
-            textBox.Text = textBox.Text.ToUpper();
+         for (var i = 0; i < _mTextBoxes.Length; i++)
+            _mTextBoxes[i].Text = _mLetters.Item2[i].ToString();
 
          _mIsLowerCase = false;
       }
@@ -105,9 +104,8 @@ namespace SymWin
       {
          if (_mIsLowerCase) return;
 
-         // What about culture? (todo)
-         foreach (var textBox in _mTextBoxes)
-            textBox.Text = textBox.Text.ToLower();
+         for (var i = 0; i < _mTextBoxes.Length; i++)
+            _mTextBoxes[i].Text = _mLetters.Item1[i].ToString();
 
          _mIsLowerCase = true;
       }

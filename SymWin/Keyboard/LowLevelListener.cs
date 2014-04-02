@@ -1,5 +1,6 @@
 ﻿/*
  * This is based on code by Jan Dyrk (http://uxsoft.cz/) for the Apple Wireless Keyboard.
+ * Some minor modifications were made.
  */
 
 using System;
@@ -22,7 +23,7 @@ namespace SymWin.Keyboard
       }
 
       #region PInvoke Structures
-      
+
       public delegate Int32 keyboardHookProc(Int32 code, Int32 wParam, ref keyboardHookStruct lParam);
 
       public struct keyboardHookStruct
@@ -207,6 +208,7 @@ namespace SymWin.Keyboard
       #endregion
 
       #region DLL imports
+
       [DllImport("user32.dll")]
       static extern IntPtr SetWindowsHookEx(Int32 idHook, keyboardHookProc callback, IntPtr hInstance, UInt32 threadId);
 

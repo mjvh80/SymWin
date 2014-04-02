@@ -36,6 +36,8 @@ namespace SymWin.Keyboard
 
    internal static class Caret
    {
+      #region Interop
+
       [DllImport("user32.dll")]
       private static extern Boolean GetCaretPos(out Point point);
 
@@ -69,6 +71,8 @@ namespace SymWin.Keyboard
       [DllImport("user32.dll")]
       static extern IntPtr GetFocus();
 
+      #endregion
+
       // Based on http://www.codeproject.com/Articles/34520/Getting-Caret-Position-Inside-Any-Application.
       public static Point GetPosition(IntPtr window)
       {
@@ -82,25 +86,12 @@ namespace SymWin.Keyboard
          //   // Try again using a more specific thread id.
          //   var curThreadId = GetCurrentThreadId();
          //   var threadId = GetWindowThreadProcessId(window, IntPtr.Zero);
-         //   var b1 = AttachThreadInput(curThreadId, threadId, true);
-
-
-
+         //   var b1 = AttachThreadInput(curThreadId, threadId, true)
          //   var focus = GetFocus();
-
-         //   var b3 = CreateCaret(window, IntPtr.Zero, 0, 0);
-         //   var b5 = ShowCaret(window);
-
          //   //var b2 = GetGUIThreadInfo(threadId, out info);
          //   //caret = info.rcCaret;
-
-         //   SetCaretPos(100, 100);
-
          //   Point point;
          //   GetCaretPos(out point);
-
-         //   var b4 = DestroyCaret();
-
          //   AttachThreadInput(curThreadId, threadId, false);
          //}
 
