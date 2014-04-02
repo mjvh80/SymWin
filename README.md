@@ -3,7 +3,7 @@ SymWin
 
 Allows one to type special characters such as å or λ on Windows without the alt-key bullshit or frequent language switching which is just cumbersome.
 
-Inspired by Apple's iOS keyboard symbol selection, this shows a popup with symbols wherever you are typing.
+Inspired by Apple's iOS and OS X keyboard symbol selection, this shows a popup with symbols wherever you are typing.
 
 It looks like this:
 
@@ -17,14 +17,15 @@ To cycle options keep pressing the letter key, or use the arrow keys on the keyb
 
 This is just an initial rough version which is working well in most applications.
 
-Todo:
------
+It is possible to configure one's symbol settings, these will be saved on a per-user basis (see tasktray menu).
 
-- (perhaps) figure out the best way to run in the background with enough privileges to avoid UAC popups or run into UIPI windows issues - this isn't required to use this tool but it'd make it more generally available
-- (perhaps) make "hot key" (currently CAPSLOCK) configurable
-- how to deal with various cultures
-- (perhaps) add support for configuring symbols (via tasktray settings menu)
-- (perhaps) dynamically re-order symbols based on usage patterns (e.g. more frequently used symobls are faster to get to)
+Nice Features Perhaps:
+----------------------
+
+- figure out the best way to run in the background with enough privileges to avoid UAC popups or run into UIPI windows issues - this isn't required to use this tool but it'd make it more generally available
+- make default symbol mappings depend on the current active keyboard, e.g. a Swedish keyboard doesn't need the å symbol for instance
+- make "hot key" (currently CAPSLOCK) configurable
+- (not sure) dynamically re-order symbols based on usage patterns (e.g. more frequently used symobls are faster to get to)
 
 Finally
 -------
