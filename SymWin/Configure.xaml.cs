@@ -45,16 +45,9 @@ namespace SymWin
          e.Cancel = true;
       }
 
-      private void OnConfigureAutoComplete(Object s, TextCompositionEventArgs e)
+      private void OnConfigureAutoComplete(Object s, KeyEventArgs e)
       {
-         // This is crude, could be better.
-         var box = (ComboBox)s;
-         foreach(Key key in box.Items)
-            if (key.ToString().StartsWith(e.Text, StringComparison.OrdinalIgnoreCase))
-            {
-               box.SelectedItem = key;
-               break;
-            }
+         ((ComboBox)s).SelectedItem = e.Key;
       }
 
       private void OnConfigureSelectionChanged(Object s, RoutedEventArgs e)
@@ -81,14 +74,8 @@ namespace SymWin
             return;
          }
 
-         if (lowerCase.Length == 0)
-         {
-            _Error("Enter at least one symbol.");
-            return;
-         }
-
          LetterMappings.UpdateKey(key, lowerCase, upperCase);
-         _Ok("Saved!");
+         _Ok("Changes for " + key + " saved!");
       }
    }
 }

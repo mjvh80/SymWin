@@ -11,34 +11,33 @@ namespace SymWin
 {
    public static class LetterMappings
    {
+      private static readonly Tuple<Char[], Char[]> _sEmpty = Tuple.Create(new Char[0], new Char[0]);
+
       public static readonly Dictionary<Key, Tuple<Char[], Char[]>> KeysToSymbols = new Dictionary<Key, Tuple<Char[], Char[]>>
       {
-         // todo: different symbols for caps, e.g. Ð ?
-
          // Initial rough mapping for letters, not too much thought has gone into this yet.
-
          { Key.A, Tuple.Create(new[] { 'ä', 'å', 'à', 'á', 'α', 'æ' }, new[] { 'Ä', 'Å', 'À', 'Á', 'א', 'Æ' })},
          { Key.B, Tuple.Create(new[] { 'β' }, new[] { 'β' })},
          { Key.C, Tuple.Create(new[] { 'ç', 'γ', '©' }, new[] { 'Ç', 'Γ', '©' })},
          { Key.D, Tuple.Create(new[] { 'Þ', 'ð', 'δ' }, new[] { 'Þ', 'Ð', 'Δ' })},
          { Key.E, Tuple.Create(new[] { 'ë', 'è', 'é', 'ê', 'ε', 'η' }, new[] { 'Ë', 'È', 'É', 'Ê', 'Ε', 'Η' })},
          { Key.F, Tuple.Create(new[] { 'ƒ', 'θ' }, new[] { 'Ƒ', 'Θ' })},
-         // { 'g', new[] { '' })}
-         // h -> astro h?
+         { Key.G, _sEmpty},
+         { Key.H, Tuple.Create(new[] { 'ħ'}, new[]  { 'Ħ' })},
          { Key.I, Tuple.Create(new[] { 'ì', 'í', 'î', 'ï', 'ι' }, new[] { 'Ì', 'Í', 'Î', 'Ï', 'Ι' })},
-         // j
+         { Key.J, _sEmpty},
          { Key.L, Tuple.Create(new[] { 'λ' }, new[] { 'Λ' })},
          { Key.M, Tuple.Create(new[] { 'µ' }, new[] { 'µ' })},
          { Key.K, Tuple.Create(new[] { 'κ' }, new[] { 'κ' })},
          { Key.N, Tuple.Create(new[] { 'ñ', 'ν' }, new[] { 'Ñ', 'ν' })},
          { Key.O, Tuple.Create(new[] { 'ö', 'ò', 'ó', 'ô', 'õ', 'ø' }, new[] { 'Ö', 'Ò', 'Ó', 'Ô', 'Õ', 'Ø' })},
          { Key.P, Tuple.Create(new[] { 'π', '¶' }, new[] { 'Π', '¶' })},
-         // { 'q',Tuple.Create( new[] {} },
+         { Key.Q, _sEmpty},
          { Key.R, Tuple.Create(new[] { '®', 'ρ' }, new[] { '®', 'Ρ' })},
          { Key.S, Tuple.Create(new[] { 'ß', 'š', 'σ' }, new[] { 'ß', 'Š', 'Σ' })},
          { Key.T, Tuple.Create(new[] { 'τ', '™' }, new[] { 'τ', '™' })},
          { Key.U, Tuple.Create(new[] { 'ù', 'ú', 'û', 'ü' }, new[] { 'Ù', 'Ú', 'Û', 'Ü' })},
-         // { 'v',Tuple.Create( new[] {})},
+         { Key.V, _sEmpty},
          { Key.W, Tuple.Create(new[] { 'ω' }, new[] { 'Ω' })},
          { Key.X, Tuple.Create(new[] { 'χ', '×' }, new[] { 'χ', '×' })},
          { Key.Y, Tuple.Create(new[] { 'ý', 'ÿ'}, new[] { 'Ý', 'Ÿ'})},
@@ -49,7 +48,7 @@ namespace SymWin
          { Key.D1, Tuple.Create(new[] { '¡', '‼', '¹' }, new[] { '¡', '‼', '¹' })},
          { Key.D2, Tuple.Create(new[] { '²', '½', '√' }, new[] { '²', '½', '√' })},
          { Key.D3, Tuple.Create(new[] { '³', '§' }, new[] { '³', '§' })},
-         { Key.D4, Tuple.Create(new[] { '£', '¥', '$', '€', '¤' }, new[] { '£', '¥', '$', '€', '¤' })},
+         { Key.D4, Tuple.Create(new[] { '£', '¥', '$', '€', '¤', '¼' }, new[] { '£', '¥', '$', '€', '¤', '¼' })},
          { Key.D5, Tuple.Create(new[] { '‰', '♫', '♪' }, new[] { '‰', '♫', '♪' })},
          { Key.D8, Tuple.Create(new[] { '★', '✼', '❀' }, new[] { '★', '✼', '❀' })},
                    
@@ -60,8 +59,19 @@ namespace SymWin
          { Key.OemQuotes, Tuple.Create(new[] { '«', '»'}, new[] { '«', '»'})},
          { Key.OemPeriod, Tuple.Create(new[]  { '…', '∙', '●', '≤'}, new[]  { '…', '∙', '●', '≤'})},
          { Key.OemComma,  Tuple.Create(new[] { '≥' }, new[] { '≥' })},
-         { Key.OemPlus,   Tuple.Create(new[] { '≈', '≠' }, new[] { '≈', '≠' })},
+         { Key.OemPlus,   Tuple.Create(new[] { '≈', '≠', '±' }, new[] { '≈', '≠', '±' })},
 
+         { Key.Decimal, _sEmpty },
+         { Key.Multiply, Tuple.Create(new[] { '×' }, new[] { '×' })},
+         { Key.OemOpenBrackets, _sEmpty }, // = Oem4
+         { Key.Oem8, _sEmpty },
+         { Key.OemQuestion, Tuple.Create(new[] { '¿'}, new[] { '¿' })},
+         { Key.OemBackslash, _sEmpty }, // Equals 102
+         { Key.OemMinus, _sEmpty },
+         { Key.OemPipe, Tuple.Create(new[] { '¦' }, new[] { '¦' }) },
+         { Key.OemSemicolon, _sEmpty }, // = Oem1 = Oem102
+         { Key.OemTilde, _sEmpty },
+         { Key.Subtract, _sEmpty },
       };
 
       public static void UpdateKey(Key key, Char[] lowerCase, Char[] upperCase)
@@ -69,7 +79,9 @@ namespace SymWin
          if (lowerCase.Length != upperCase.Length) throw new ArgumentException("lower and upper case letter arrays must be of equal length");
          var pair = Tuple.Create(lowerCase, upperCase);
          KeysToSymbols[key] = pair;
-         KeyToWindowMap[key] = new LetterSelector(key, pair);
+
+         if (lowerCase.Length > 0)
+            KeyToWindowMap[key] = new LetterSelector(key, pair);
 
          _UpdateCustomKeyBindings();
       }
@@ -88,7 +100,8 @@ namespace SymWin
 
          foreach (var kvp in KeysToSymbols)
          {
-            KeyToWindowMap.Add(kvp.Key, new LetterSelector(kvp.Key, kvp.Value)); ;
+            if (kvp.Value.Item1.Length > 0)
+               KeyToWindowMap.Add(kvp.Key, new LetterSelector(kvp.Key, kvp.Value)); ;
          }
       }
 
@@ -136,6 +149,12 @@ namespace SymWin
          }
 
          Properties.Settings.Default.KeyBindings = doc.OuterXml;
+         Properties.Settings.Default.Save();
+      }
+
+      public static void DeleteBindings() 
+      {
+         Properties.Settings.Default.KeyBindings = "";
          Properties.Settings.Default.Save();
       }
    }

@@ -7,6 +7,7 @@
       <TextBox HorizontalAlignment="Left" Height="46" Margin="108,122,0,0" TextWrapping="Wrap" Text="Foo is the new Bar" VerticalAlignment="Top" Width="248" FontSize="16"/>
       <Button Content="Button" HorizontalAlignment="Left" Margin="117,235,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
       <Button Content="Configure" Click="OnConfigureClick"  Margin="218,235,192,43" />
+      <Button Content="DeleteConfig" Click="OnDelConfigureClick" Margin="339,235,65,43" RenderTransformOrigin="2.481,3.896"  />
       <tb:TaskbarIcon
          IconSource="pack://application:,,,/Resources/tasktray.ico"
          ToolTipText="SymWin Symbol Support">

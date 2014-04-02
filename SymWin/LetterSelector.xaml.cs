@@ -19,20 +19,21 @@ namespace SymWin
       private readonly TextBox[] _mTextBoxes;
       private Tuple<Char[], Char[]> _mLetters;
 
+      public readonly Boolean IsEmpty;
+
       public LetterSelector(Key key, Tuple<Char[], Char[]> letters)
       {
          if (letters == null) throw new ArgumentNullException("letters");
-         if (letters.Item1.Length == 0 || letters.Item1.Length != letters.Item2.Length)
-            throw new ArgumentException("Invalid letter definition (empty or unequal lengths).");
+         if (letters.Item1 == null || letters.Item2 == null || letters.Item1.Length == 0 || letters.Item1.Length != letters.Item2.Length)
+            throw new ArgumentException("Invalid letter definition, unequal lower and upper case sequence length or length 0.");
 
          InitializeComponent();
 
          var letterTemplate = Utils.CloneWPFObject(this.LetterPanel.Children.Cast<TextBox>().First());
+         var width = 0.0;
 
          // Remove sample children.
          this.LetterPanel.Children.Clear();
-
-         var width = 0.0;
 
          _mTextBoxes = new TextBox[letters.Item1.Length];
 

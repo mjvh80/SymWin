@@ -66,14 +66,14 @@ namespace SymWin
          LowLevelListener.HookedKeys.Add(Key.RightShift);
          LowLevelListener.Register();
 
-         Selector = new LetterSelector(Key.A, LetterMappings.KeysToSymbols[Key.A]);
-
          LowLevelListener.KeyDown += new LowLevelListener.KeyHookEventHandler(e => Handler.HandleKeyPress(true, e));
          LowLevelListener.KeyUp += new LowLevelListener.KeyHookEventHandler(e => Handler.HandleKeyPress(false, e));
       }
 
       private void Button_Click(object sender, RoutedEventArgs e)
       {
+         if (Selector == null)
+            Selector = new LetterSelector(Key.A, LetterMappings.KeysToSymbols[Key.A]);
          Selector.Show();
          Selector.SelectNext();
       }
@@ -101,6 +101,11 @@ namespace SymWin
       private void OnConfigureClick(Object sender, RoutedEventArgs e)
       {
          (_sConfigureWindow ?? (_sConfigureWindow = new Configure())).Show();
+      }
+
+      private void OnDelConfigureClick(Object sender, RoutedEventArgs e)
+      {
+         LetterMappings.DeleteBindings();
       }
    }
 }
