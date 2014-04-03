@@ -4,6 +4,7 @@
 
 using SymWin.Keyboard;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -68,6 +69,12 @@ namespace SymWin
 
          LowLevelListener.KeyDown += new LowLevelListener.KeyHookEventHandler(e => Handler.HandleKeyPress(true, e));
          LowLevelListener.KeyUp += new LowLevelListener.KeyHookEventHandler(e => Handler.HandleKeyPress(false, e));
+
+         try
+         {
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
+         }
+         catch { }
       }
 
       private void Button_Click(object sender, RoutedEventArgs e)
