@@ -87,7 +87,9 @@ namespace SymWin
          else
             EnableMenuItem.Header = "Enable";
 
-         Handler.Enable(enable);
+         // For reasons not understood at the moment, capslock state is not detected whenever the taskicon click
+         // is being handled. In this case we'll always update caps state.
+         Handler.Enable(enable, force: !(sender is MenuItem));
 
          // Show a balloon tip only if directly clicked on icon.
          if (sender is Hardcodet.Wpf.TaskbarNotification.TaskbarIcon)

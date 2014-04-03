@@ -1000,10 +1000,10 @@ namespace SymWin.Keyboard
 
       #endregion
 
-      public static void Enable(Boolean yes)
+      public static void Enable(Boolean yes, Boolean force)
       {
          if (yes)
-            ValidateCAPSLOCKState();
+            ValidateCAPSLOCKState(force);
          else
             _HidePopup();
 
@@ -1014,12 +1014,12 @@ namespace SymWin.Keyboard
       /// If the program is started with capslock already enabled, we'll always have capslock enabled.
       /// This isn't what we want (probably).
       /// </summary>
-      public static void ValidateCAPSLOCKState()
+      public static void ValidateCAPSLOCKState(Boolean force = false)
       {
          var buffer = new Byte[256];
-         if (GetKeyboardState(buffer))
+         if (GetKeyboardState(buffer)) // todo: instead of force, simply always update?
          {
-            if (buffer[(Int32)VirtualKeyShort.CAPITAL] == 1) // capslock is active
+            if (force || buffer[(Int32)VirtualKeyShort.CAPITAL] == 1) // capslock is active
             {
                // Note: SetKeyboardState apparently only works for win95, so let's synthesize the key instead.
                var keyboardInput = new KEYBDINPUT();
