@@ -80,15 +80,20 @@ namespace SymWin
 
       private void OnTaskTrayDisable(Object sender, RoutedEventArgs e) 
       {
-         var item = (MenuItem)sender;
-         var enable = item.Header.Equals("Enable");
+         var enable = EnableMenuItem.Header.Equals("Enable");
 
          if (enable)
-            item.Header = "Disable";
+            EnableMenuItem.Header = "Disable";
          else
-            item.Header = "Enable";
+            EnableMenuItem.Header = "Enable";
 
          Handler.Enable(enable);
+
+         // Show a balloon tip only if directly clicked on icon.
+         if (sender is Hardcodet.Wpf.TaskbarNotification.TaskbarIcon)
+         {
+            TrayIcon.ShowBalloonTip(enable ? "Enabled" : "Disabled", "SymWin has been " + (enable ? "enabled" : "disabled") + ".", Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+         }
       }
 
       private void OnTaskTrayQuit(Object sender, RoutedEventArgs e) 

@@ -9,12 +9,14 @@
       <Button Content="Configure" Click="OnConfigureClick"  Margin="218,235,192,43" />
       <Button Content="DeleteConfig" Click="OnDelConfigureClick" Margin="339,235,65,43" RenderTransformOrigin="2.481,3.896"  />
       <tb:TaskbarIcon
+         Name="TrayIcon"
+         TrayLeftMouseUp="OnTaskTrayDisable"
          IconSource="pack://application:,,,/Resources/tasktray.ico"
          ToolTipText="SymWin Symbol Support">
          <tb:TaskbarIcon.ContextMenu>
             <ContextMenu>
                <MenuItem Header="Configure Symbols" Click="OnConfigureClick" />
-               <MenuItem Header="Disable" Click="OnTaskTrayDisable" />
+               <MenuItem Header="Disable" Name="EnableMenuItem" Click="OnTaskTrayDisable" />
                <MenuItem Header="Quit" Click="OnTaskTrayQuit" />
             </ContextMenu>
          </tb:TaskbarIcon.ContextMenu>
