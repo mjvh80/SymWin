@@ -1030,8 +1030,14 @@ namespace SymWin.Keyboard
                keyDown.type = INPUT_KEYBOARD;
                keyDown.U.ki = keyboardInput;
 
+               var keyUp = keyDown;
+               keyUp.U.ki.dwFlags |= KEYEVENTF.KEYUP;
+
                // Attempt to disable capslock, tough if this fails.
                SendInput(1, new[] { keyDown }, Marshal.SizeOf(keyDown));
+
+               // Do not send the keyUp as part of the above array, it is ignored.
+               SendInput(1, new[] { keyUp }, Marshal.SizeOf(keyDown));
             }
          }
       }
@@ -1259,11 +1265,15 @@ namespace SymWin.Keyboard
 
                   ((SynchronizationContext)context).Post(_ =>
                   {
-                     SendInput(1, new[] { keyDown, keyUp }, Marshal.SizeOf(keyDown));
+                     SendInput(1, new[] { keyDown }, Marshal.SizeOf(keyDown));
+                     SendInput(1, new[] { keyUp }, Marshal.SizeOf(keyDown));
                   }, null);
                }, SynchronizationContext.Current);
          else
+         {
             SendInput(1, new[] { keyDown, keyUp }, Marshal.SizeOf(keyDown));
+            SendInput(1, new[] { keyUp }, Marshal.SizeOf(keyDown));
+         }
       }
    }
 }

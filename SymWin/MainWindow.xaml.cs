@@ -100,7 +100,9 @@ namespace SymWin
 
       private void OnConfigureClick(Object sender, RoutedEventArgs e)
       {
-         (_sConfigureWindow ?? (_sConfigureWindow = new Configure())).Show();
+         var window = (_sConfigureWindow ?? (_sConfigureWindow = new Configure()));
+         window.Show();
+         window.Activate();
       }
 
       private void OnDelConfigureClick(Object sender, RoutedEventArgs e)
