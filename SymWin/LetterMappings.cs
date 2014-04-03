@@ -57,8 +57,8 @@ namespace SymWin
 
          { Key.Divide, Tuple.Create(new[]  {'÷'}, new[]  {'÷'})},
          { Key.OemQuotes, Tuple.Create(new[] { '«', '»'}, new[] { '«', '»'})},
-         { Key.OemPeriod, Tuple.Create(new[]  { '…', '∙', '●', '≤'}, new[]  { '…', '∙', '●', '≤'})},
-         { Key.OemComma,  Tuple.Create(new[] { '≥' }, new[] { '≥' })},
+         { Key.OemComma, Tuple.Create(new[]  { '…', '∙', '●', '≤'}, new[]  { '…', '∙', '●', '≤'})},
+         { Key.OemPeriod,  Tuple.Create(new[] { '≥' }, new[] { '≥' })},
          { Key.OemPlus,   Tuple.Create(new[] { '≈', '≠', '±' }, new[] { '≈', '≠', '±' })},
 
          { Key.Decimal, _sEmpty },
