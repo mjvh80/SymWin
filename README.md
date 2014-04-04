@@ -21,6 +21,16 @@ It is possible to configure one's symbol settings, these will be saved on a per-
 
 It is also possible to temporarily disable SymWin if you need access to CAPSLOCK for instance (see tasktray menu).
 
+How To
+------
+Currently I do not provide a pre-built version, but may do so given sufficient interest.
+
+It is easy to build, however, my running the ```build.cmd``` script or using Visual Studio. The steps are:
+
+- clone this repository
+- run build.cmd
+
+
 Nice Features Perhaps:
 ----------------------
 
