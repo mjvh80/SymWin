@@ -991,6 +991,9 @@ namespace SymWin.Keyboard
       [DllImport("USER32.dll")]
       static extern short GetKeyState(VirtualKeyShort nVirtKey);
 
+      [DllImport("USER32.dll")]
+      static extern short GetAsyncKeyState(VirtualKeyShort nVirtKey);
+
       [DllImport("user32.dll")]
       [return: MarshalAs(UnmanagedType.Bool)]
       static extern bool GetKeyboardState(byte[] lpKeyState);
@@ -1000,10 +1003,10 @@ namespace SymWin.Keyboard
 
       #endregion
 
-      public static void Enable(Boolean yes, Boolean force)
+      public static void Enable(Boolean yes)
       {
          if (yes)
-            ValidateCAPSLOCKState(force);
+            ValidateCAPSLOCKState();
          else
             _HidePopup();
 
@@ -1014,12 +1017,12 @@ namespace SymWin.Keyboard
       /// If the program is started with capslock already enabled, we'll always have capslock enabled.
       /// This isn't what we want (probably).
       /// </summary>
-      public static void ValidateCAPSLOCKState(Boolean force = false)
+      public static void ValidateCAPSLOCKState()
       {
          var buffer = new Byte[256];
-         if (GetKeyboardState(buffer)) // todo: instead of force, simply always update?
+         if (GetKeyboardState(buffer))
          {
-            if (force || buffer[(Int32)VirtualKeyShort.CAPITAL] == 1) // capslock is active
+            if (buffer[(Int32)VirtualKeyShort.CAPITAL] == 1) // capslock is active
             {
                // Note: SetKeyboardState apparently only works for win95, so let's synthesize the key instead.
                var keyboardInput = new KEYBDINPUT();
@@ -1153,7 +1156,7 @@ namespace SymWin.Keyboard
                      position.X = info.rcWork.Left + (info.rcWork.Right - info.rcWork.Left) / 2 - (Int32)(_sActiveSelectorWindow.ActualWidth / 2.0);
                      position.Y = info.rcWork.Top + (info.rcWork.Bottom - info.rcWork.Top) / 2 - (Int32)(_sActiveSelectorWindow.ActualHeight / 2.0);
                   }
-                  
+
                   // Adjust position to fit within the given dimensions.
                   if (position.X + _sActiveSelectorWindow.ActualWidth > info.rcWork.Right)
                      position.X = info.rcWork.Right - (Int32)_sActiveSelectorWindow.ActualWidth;
