@@ -41,6 +41,16 @@ Nice Features Perhaps:
 
 If you're interested in any of these features feel free to implement them and open a pull request. Otherwise talk to me, I might just be persuaded to implement the feature.
 
+Metro
+-----
+SymWin does not currently show in Metro because all kinds of special stuff needs to happen:
+- The window requires WS_EX_TOPMOST a flag which WPF does not set if ShowInTaskbar = false, but can be set using SetWindowPos.
+- The application must have uiaccess="true" for which it must be signed using a certificate which must be installed to the Trusted Root Certificate Authority.
+- It must be run from a trusted location, e.g. Prog Files
+
+See http://blogs.microsoft.co.il/pavely/2012/05/16/windows-8-topmost-vs-topmost/ for details. I am not sure if it is possible to do this "easily", and I haven't done this because I never use Metro.
+
+
 Finally
 -------
 I know CAPSLOCK may not appease everyone and my app currently disables it. I never use CAPSLOCK for anything meaningful and it is one of the few key combinations that I could think off that is not already used and is easy to type.
