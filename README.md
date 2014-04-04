@@ -48,7 +48,7 @@ SymWin does not currently show in Metro because all kinds of special stuff needs
 - The application must have uiaccess="true" for which it must be signed using a certificate which must be installed to the Trusted Root Certificate Authority.
 - It must be run from a trusted location, e.g. Prog Files
 
-See http://blogs.microsoft.co.il/pavely/2012/05/16/windows-8-topmost-vs-topmost/ for details. I am not sure if it is possible to do this "easily", and I haven't done this because I never use Metro.
+See http://blogs.microsoft.co.il/pavely/2012/05/16/windows-8-topmost-vs-topmost/ for details.
 
 
 Finally
