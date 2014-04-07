@@ -1092,7 +1092,7 @@ namespace SymWin.Keyboard
 
          if (_sActiveSelectorWindow == null) return false;
 
-         var selectorShowing = _sActiveSelectorWindow.IsActive && _sActiveSelectorWindow.IsVisible;
+         var selectorShowing = _sActiveSelectorWindow.IsVisible;
 
          // Change case if shift is used.
          // First we need an additional shift key press to activate it, then we'll handle it as a modifier.
@@ -1221,7 +1221,6 @@ namespace SymWin.Keyboard
             _sActiveSelectorWindow.ToLower();
 
          _sActiveSelectorWindow.Visibility = Visibility.Visible;
-         _sActiveSelectorWindow.Activate();
       }
 
       private static void _SendSelectedLetterAsKeyPress(Boolean delayInput = false)
