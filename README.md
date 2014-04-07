@@ -28,7 +28,11 @@ Currently I do not provide a pre-built version, but may do so given sufficient i
 It is easy to build, however, my running the ```build.cmd``` script or using Visual Studio. The steps are:
 
 - clone this repository
-- run build.cmd
+- run build.cmd or use Visual Studio
+
+Todo:
+-----
+- SymWin does not activate the popup window when the keyboard is used which makes the application appear within the application the user is currently working in. This does *not*, however, work when the mouse is used (the target application loses focus for a second). I don't currently know how to prevent this. Any help is appreciated.
 
 
 Nice Features Perhaps:
@@ -47,6 +51,8 @@ SymWin does not currently show in Metro because all kinds of special stuff needs
 - The window requires WS_EX_TOPMOST a flag which WPF does not set if ShowInTaskbar = false, but can be set using SetWindowPos.
 - The application must have uiaccess="true" for which it must be signed using a certificate which must be installed to the Trusted Root Certificate Authority.
 - It must be run from a trusted location, e.g. Prog Files
+
+Is such support realistically possible without being Microsoft?
 
 See http://blogs.microsoft.co.il/pavely/2012/05/16/windows-8-topmost-vs-topmost/ for details.
 
