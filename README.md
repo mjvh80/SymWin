@@ -23,7 +23,7 @@ It is also possible to temporarily disable SymWin if you need access to CAPSLOCK
 
 How To
 ------
-Currently I do not provide a pre-built version, but may do so given sufficient interest.
+A ready-made version can be found here: https://github.com/mjvh80/SymWin/releases .
 
 It is easy to build, however, my running the ```build.cmd``` script or using Visual Studio. The steps are:
 
