@@ -72,7 +72,10 @@ namespace SymWin
 
          try
          {
-            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
+            // Keep the app responsive even if system is busy.
+            // I found that AboveNormal does not keep the app responsive enough if the system is particularly busy,
+            // although even at High there can be a noticeable (but generally acceptable) lag for activation.
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
          }
          catch { }
       }
