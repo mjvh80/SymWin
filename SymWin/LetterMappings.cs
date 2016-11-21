@@ -16,17 +16,43 @@ namespace SymWin
         public static readonly Dictionary<Key, Tuple<Char[], Char[]>> KeysToSymbols = new Dictionary<Key, Tuple<Char[], Char[]>>
       {
          // Initial rough mapping for letters, not too much thought has gone into this yet.
-
+         { Key.A, Tuple.Create(new[] { '≠','≈','≝','≡','≤','≥','≪','≫' }, new[] {'≠','≈','≝','≡','≤','≥','≪','≫' })},
+         { Key.B, _sEmpty},
+         { Key.C, _sEmpty},
+         { Key.D, _sEmpty},
+         { Key.E, _sEmpty},
+         { Key.F, Tuple.Create(new[] { 'ƒ', 'θ' }, new[] { 'Ƒ', 'Θ' })},
          { Key.G, Tuple.Create(new [] { 'α','β','γ','δ', 'ε','ζ','η','θ', 'κ', 'λ','μ','π','ρ','σ','τ','υ', 'φ', 'χ', 'ψ', 'ω' },
-                               new[] {  ' '  })},
-
+                                   new[] {  'α','β','γ','δ', 'ε','ζ','η','θ', 'κ', 'λ','μ','π','ρ','σ','τ','υ', 'φ', 'χ', 'ψ', 'ω'  })},
+         { Key.H, _sEmpty},
+         { Key.I, _sEmpty},
+         { Key.J, _sEmpty},
+         { Key.L, _sEmpty},
+         { Key.M, _sEmpty},
+         { Key.K, _sEmpty},
+         { Key.N, _sEmpty},
          { Key.O, Tuple.Create(new[] { '∈','∉','⊂','⊄','⊆','⊈','⊃','∪','∩','∖','∅' },
                                new[] { '¬','∨','∧','⊕','↑','∀','∃','⇒','→','⇔','↔'})},
+         { Key.P, Tuple.Create(new[] { 'π', '¶' }, new[] { 'Π', '¶' })},
+         { Key.Q, Tuple.Create(new[] { '−','±','·','×','÷','²','³','√','∛','′','″','‴','∏','∑' }, new[] { '−','±','·','×','÷','²','³','√','∛','′','″','‴','∏','∑' })},
+         { Key.R, _sEmpty},
+         { Key.S, Tuple.Create(new[] { 'ℂ','ℕ','ℙ','ℚ','ℝ','ℤ' }, new[] { 'ℂ','ℕ','ℙ','ℚ','ℝ','ℤ' })},
+         { Key.T, _sEmpty},
+         { Key.U, _sEmpty},
+         { Key.V, _sEmpty},
+         { Key.W, _sEmpty},
+         { Key.X, _sEmpty},
+         { Key.Y, _sEmpty},
+         { Key.Z, _sEmpty},
 
-         { Key.S, Tuple.Create(new[] { 'ℂ','ℕ','ℙ','ℚ','ℝ','ℤ' }, new[] { ' ' })},
-         { Key.S, Tuple.Create(new[] { 'ℂ','ℕ','ℙ','ℚ','ℝ','ℤ' }, new[] { ' ' })},
-         { Key.A, Tuple.Create(new[] { '≠','≈','≝','≡','≤','≥','≪','≫' }, new[] { ' ' })},
-         { Key.Q, Tuple.Create(new[] { '−','±','·','×','÷','²','³','√','∛','′','″','‴','∏','∑' }, new[] { ' ' })},
+
+        
+
+        
+
+      
+       
+     
          
          // Numbers
          { Key.D0, Tuple.Create(new[]  { '☺', '☻', '∞', 'ø' }, new[]  { '☺', '☻', '∞', 'Ø' })},
