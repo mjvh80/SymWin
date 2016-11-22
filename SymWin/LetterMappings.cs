@@ -45,15 +45,6 @@ namespace SymWin
          { Key.Y, _sEmpty},
          { Key.Z, _sEmpty},
 
-
-        
-
-        
-
-      
-       
-     
-         
          // Numbers
          { Key.D0, Tuple.Create(new[]  { '☺', '☻', '∞', 'ø' }, new[]  { '☺', '☻', '∞', 'Ø' })},
          { Key.D1, Tuple.Create(new[] { '¡', '‼', '¹' }, new[] { '¡', '‼', '¹' })},
