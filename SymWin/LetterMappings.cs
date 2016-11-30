@@ -13,28 +13,17 @@ namespace SymWin
 
     public static class LetterMappings
     {
-
-        private static readonly char[] OPERATION_CHARS = { '⊕', '¬', '÷', '±', '∕', '∘', '∙', '⋅', '∓'};
-
-        private static readonly char[] NEGATED_RELATIONS_CHARS = {'∉','∌',  '⊄',  '⊅' ,'⊈', '⊊',  '⊋', '⊉', '≮', '≯', '≰', '≱', '≢', '≁', '≄', '≉', '≇', '≭','≨','≩','⊀','⊁','⋠','⋡','⋢','⋣','⋦','⋧','⋨','⋩','⋪','⋫','⋬','⋭','∤','∦','⊬','⊭','⊮','⊯','∄' };
-        private static readonly char[] RELATIONS_CHARS = {'∀','∃','∈','∋','⊂', '⊃', '⊆', '⊇', '<', '>', '≤', '≥', '≡', '∼', '≃', '≈', '≅','≍','≪','≺', '≻', '≼', '≽', '⊏', '⊐', '⊑', '⊒', '∥', '⊥', '⊢', '⊣', '⋈', '×',  '∝', '∩', '∪', '⊎', '⊓', '⊔', '∧', '∨'};
-
-        private static readonly char[] GREEK_LETTERS = { 'α', 'β', 'γ', 'δ', 'ε', 'ζ', 'η', 'θ', 'κ', 'λ', 'μ', 'π', 'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω' };
-
-        private static readonly char[] DOUBLE_STRUCK_CHARS = { 'ℂ', 'ℕ', 'ℙ', 'ℚ', 'ℝ', 'ℤ' };
-            
         private static readonly Tuple<Char[], Char[]> _sEmpty = Tuple.Create(new Char[0], new Char[0]);
 
         public static readonly Dictionary<Key, Tuple<Char[], Char[]>> KeysToSymbols = new Dictionary<Key, Tuple<Char[], Char[]>>
       {
-         // Initial rough mapping for letters, not too much thought has gone into this yet.
          { Key.A, Tuple.Create(new[] { '≠','≈','≝','≡','≤','≥','≪','≫' }, new[] {'≠','≈','≝','≡','≤','≥','≪','≫' })},
          { Key.B, _sEmpty},
          { Key.C, _sEmpty},
          { Key.D, _sEmpty},
          { Key.E, _sEmpty},
          { Key.F, Tuple.Create(new[] { 'ƒ', 'θ' }, new[] { 'Ƒ', 'Θ' })},
-         { Key.G, Tuple.Create(GREEK_LETTERS,GREEK_LETTERS) },
+         { Key.G, Tuple.Create(CharacterConst.GREEK_LETTERS,CharacterConst.GREEK_LETTERS) },
          { Key.H, _sEmpty},
          { Key.I, _sEmpty},
          { Key.J, _sEmpty},
@@ -42,12 +31,12 @@ namespace SymWin
          { Key.M, _sEmpty},
          { Key.K, _sEmpty},
          { Key.N, _sEmpty},
-         { Key.O, Tuple.Create(OPERATION_CHARS, OPERATION_CHARS)},
+         { Key.O, Tuple.Create(CharacterConst.OPERATION_CHARS, CharacterConst.OPERATION_CHARS)},
          { Key.P, Tuple.Create(new[] { 'π', '¶' }, new[] { 'Π', '¶' })},
-         { Key.Q, Tuple.Create(RELATIONS_CHARS, NEGATED_RELATIONS_CHARS)},
+         { Key.Q, Tuple.Create(CharacterConst.RELATIONS_CHARS, CharacterConst.NEGATED_RELATIONS_CHARS)},
 
          { Key.R, _sEmpty},
-         { Key.S, Tuple.Create(DOUBLE_STRUCK_CHARS,DOUBLE_STRUCK_CHARS)},
+         { Key.S, Tuple.Create(CharacterConst.DOUBLE_STRUCK_CHARS,CharacterConst.DOUBLE_STRUCK_CHARS)},
          { Key.T, _sEmpty},
          { Key.U, _sEmpty},
          { Key.V, _sEmpty},
