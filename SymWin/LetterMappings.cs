@@ -9,41 +9,37 @@ using System.Xml;
 
 namespace SymWin
 {
-
-
     public static class LetterMappings
     {
-        private static readonly Tuple<Char[], Char[]> _sEmpty = Tuple.Create(new Char[0], new Char[0]);
-
         public static readonly Dictionary<Key, Tuple<Char[], Char[]>> KeysToSymbols = new Dictionary<Key, Tuple<Char[], Char[]>>
       {
          { Key.A, Tuple.Create(new[] { '≠','≈','≝','≡','≤','≥','≪','≫' }, new[] {'≠','≈','≝','≡','≤','≥','≪','≫' })},
-         { Key.B, _sEmpty},
-         { Key.C, _sEmpty},
-         { Key.D, _sEmpty},
-         { Key.E, _sEmpty},
+         { Key.B, CharacterConst.EMPTY},
+         { Key.C, CharacterConst.EMPTY},
+         { Key.D, CharacterConst.EMPTY},
+         { Key.E, CharacterConst.EMPTY},
          { Key.F, Tuple.Create(new[] { 'ƒ', 'θ' }, new[] { 'Ƒ', 'Θ' })},
          { Key.G, Tuple.Create(CharacterConst.GREEK_LETTERS,CharacterConst.GREEK_LETTERS) },
-         { Key.H, _sEmpty},
-         { Key.I, _sEmpty},
-         { Key.J, _sEmpty},
-         { Key.L, _sEmpty},
-         { Key.M, _sEmpty},
-         { Key.K, _sEmpty},
-         { Key.N, _sEmpty},
+         { Key.H, CharacterConst.EMPTY},
+         { Key.I, CharacterConst.EMPTY},
+         { Key.J, CharacterConst.EMPTY},
+         { Key.L, CharacterConst.EMPTY},
+         { Key.M, CharacterConst.EMPTY},
+         { Key.K, CharacterConst.EMPTY},
+         { Key.N, CharacterConst.EMPTY},
          { Key.O, Tuple.Create(CharacterConst.OPERATION_CHARS, CharacterConst.OPERATION_CHARS)},
          { Key.P, Tuple.Create(new[] { 'π', '¶' }, new[] { 'Π', '¶' })},
          { Key.Q, Tuple.Create(CharacterConst.RELATIONS_CHARS, CharacterConst.NEGATED_RELATIONS_CHARS)},
 
-         { Key.R, _sEmpty},
+         { Key.R, CharacterConst.EMPTY},
          { Key.S, Tuple.Create(CharacterConst.DOUBLE_STRUCK_CHARS,CharacterConst.DOUBLE_STRUCK_CHARS)},
-         { Key.T, _sEmpty},
-         { Key.U, _sEmpty},
-         { Key.V, _sEmpty},
-         { Key.W, _sEmpty},
-         { Key.X, _sEmpty},
-         { Key.Y, _sEmpty},
-         { Key.Z, _sEmpty},
+         { Key.T, CharacterConst.EMPTY},
+         { Key.U, CharacterConst.EMPTY},
+         { Key.V, CharacterConst.EMPTY},
+         { Key.W, CharacterConst.EMPTY},
+         { Key.X, CharacterConst.EMPTY},
+         { Key.Y, CharacterConst.EMPTY},
+         { Key.Z, CharacterConst.EMPTY},
 
          // Numbers
          { Key.D0, Tuple.Create(new[]  { '☺', '☻', '∞', 'ø' }, new[]  { '☺', '☻', '∞', 'Ø' })},
@@ -63,17 +59,17 @@ namespace SymWin
          { Key.OemPeriod,  Tuple.Create(new[] { '≥' }, new[] { '≥' })},
          { Key.OemPlus,   Tuple.Create(new[] { '≈', '≠', '±' }, new[] { '≈', '≠', '±' })},
 
-         { Key.Decimal, _sEmpty },
+         { Key.Decimal, CharacterConst.EMPTY },
          { Key.Multiply, Tuple.Create(new[] { '×' }, new[] { '×' })},
-         { Key.OemOpenBrackets, _sEmpty }, // = Oem4
-         { Key.Oem8, _sEmpty },
+         { Key.OemOpenBrackets, CharacterConst.EMPTY }, // = Oem4
+         { Key.Oem8, CharacterConst.EMPTY },
          { Key.OemQuestion, Tuple.Create(new[] { '¿'}, new[] { '¿' })},
-         { Key.OemBackslash, _sEmpty }, // Equals 102
-         { Key.OemMinus, _sEmpty },
+         { Key.OemBackslash, CharacterConst.EMPTY }, // Equals 102
+         { Key.OemMinus, CharacterConst.EMPTY },
          { Key.OemPipe, Tuple.Create(new[] { '¦' }, new[] { '¦' }) },
-         { Key.OemSemicolon, _sEmpty }, // = Oem1 = Oem102
-         { Key.OemTilde, _sEmpty },
-         { Key.Subtract, _sEmpty },
+         { Key.OemSemicolon, CharacterConst.EMPTY }, // = Oem1 = Oem102
+         { Key.OemTilde, CharacterConst.EMPTY },
+         { Key.Subtract, CharacterConst.EMPTY },
       };
 
         public static void UpdateKey(Key key, Char[] lowerCase, Char[] upperCase)

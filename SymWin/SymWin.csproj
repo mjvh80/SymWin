@@ -61,6 +61,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CharacterConst.cs" />
     <Compile Include="Configure.xaml.cs">
       <DependentUpon>Configure.xaml</DependentUpon>
     </Compile>

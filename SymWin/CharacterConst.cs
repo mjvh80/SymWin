@@ -1,4 +1,6 @@
-﻿namespace SymWin
+﻿using System;
+
+namespace SymWin
 {
     public class CharacterConst
     {
@@ -12,5 +14,6 @@
 
         public static readonly char[] DOUBLE_STRUCK_CHARS = { 'ℂ', 'ℕ', 'ℙ', 'ℚ', 'ℝ', 'ℤ' };
 
+        public static readonly Tuple<Char[], Char[]> EMPTY= Tuple.Create(new Char[0], new Char[0]);
     }
 }
