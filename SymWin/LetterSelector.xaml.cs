@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace SymWin
 {
@@ -45,8 +46,6 @@ namespace SymWin
 
                 // Todo: it seems our "clone" is not cloning events, so let's hook it here.
                 newLetter.PreviewMouseUp += OnMouseUp;
-                newLetter.GotFocus += NewLetter_GotFocus;
-                newLetter.LostFocus += NewLetter_LostFocus;
                 // Adjust border thickness. It'd be nice if we can (?) do this in xaml using style ala css pseudo selectors
                 var borderThick = newLetter.BorderThickness;
                 borderThick.Left = borderThick.Right = 1;
@@ -80,25 +79,60 @@ namespace SymWin
             this.Loaded += (_, __) => SelectNext();
         }
 
-        private void NewLetter_LostFocus(object sender, RoutedEventArgs e)
+        UIElement _prevTextBox;
+
+        protected readonly DoubleAnimation WidthAnimation = new DoubleAnimation();
+        protected readonly DoubleAnimation HeightAnimation = new DoubleAnimation();
+        protected readonly Storyboard _textBoxStoryboard = new Storyboard();
+
+        private void SetZoom(object sender)
         {
-            //var focusedTextBox = sender as TextBox;
-            //if (focusedTextBox != null)
-            //{
-            //    focusedTextBox.Width += 50;
-            //    focusedTextBox.Height += 50;
-            //}
+            var focusedTextBox = sender as UIElement;
+            if (focusedTextBox != null)
+            {
+                if (_prevTextBox != null)
+                {
+                    //_prevTextBox.Width = focusedTextBox.Width;
+                    //_prevTextBox.Height = focusedTextBox.Height;
+                }
+
+                _prevTextBox = focusedTextBox;
+
+                //focusedTextBox.Width += 50;
+                //focusedTextBox.Height += 50;
+
+                SetAnimation(1d, 3, "RenderTransform.(ScaleTransform.ScaleX)", WidthAnimation, focusedTextBox);
+                SetAnimation(1d, 3, "RenderTransform.(ScaleTransform.ScaleY)", HeightAnimation, focusedTextBox);
+
+                if (_textBoxStoryboard.Children.Count == 0)
+                {
+                    _textBoxStoryboard.Children.Add(WidthAnimation);
+                    _textBoxStoryboard.Children.Add(HeightAnimation);
+                }
+
+                _textBoxStoryboard.Begin();
+                _textBoxStoryboard.Completed += _textBoxStoryboard_Completed;
+            }
         }
 
-        private void NewLetter_GotFocus(object sender, RoutedEventArgs e)
+        private void _textBoxStoryboard_Completed(object sender, EventArgs e)
         {
-            //var focusedTextBox = sender as TextBox;
-            //if (focusedTextBox != null && focusedTextBox.Width > 50)
-            //{
-            //    focusedTextBox.Width -= 50;
-            //    focusedTextBox.Height -= 50;
-            //}
+          
         }
+
+        private void SetAnimation(double from, double to, string targetProp, DoubleAnimation animation, UIElement AnimatedElement)
+        {
+            animation.EasingFunction = new CubicEase();
+
+            animation.Duration = TimeSpan.FromSeconds(value : 0.5);
+
+            animation.From = from;
+            animation.To = to;
+
+            Storyboard.SetTarget(animation, AnimatedElement);
+            Storyboard.SetTargetProperty(animation, new PropertyPath(targetProp));
+        }
+
 
         public readonly Key Key;
 
@@ -140,7 +174,10 @@ namespace SymWin
 
             _mActiveIndex = (_mActiveIndex + 1) % count;
 
-            _mTextBoxes[_mActiveIndex].Focus();
+            var txtBox = _mTextBoxes[_mActiveIndex];
+
+            txtBox.Focus();
+            SetZoom(txtBox);
         }
 
         public void SelectPrevious()
