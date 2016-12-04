@@ -13,33 +13,35 @@ namespace SymWin
     {
         public static readonly Dictionary<Key, Tuple<Char[], Char[]>> KeysToSymbols = new Dictionary<Key, Tuple<Char[], Char[]>>
       {
-         { Key.A, Tuple.Create(new[] { '≠','≈','≝','≡','≤','≥','≪','≫' }, new[] {'≠','≈','≝','≡','≤','≥','≪','≫' })},
-         { Key.B, CharacterConst.EMPTY},
-         { Key.C, CharacterConst.EMPTY},
-         { Key.D, CharacterConst.EMPTY},
-         { Key.E, CharacterConst.EMPTY},
-         { Key.F, Tuple.Create(new[] { 'ƒ', 'θ' }, new[] { 'Ƒ', 'Θ' })},
-         { Key.G, Tuple.Create(CharacterConst.GREEK_LETTERS,CharacterConst.GREEK_LETTERS) },
-         { Key.H, CharacterConst.EMPTY},
-         { Key.I, CharacterConst.EMPTY},
-         { Key.J, CharacterConst.EMPTY},
-         { Key.L, CharacterConst.EMPTY},
-         { Key.M, CharacterConst.EMPTY},
-         { Key.K, CharacterConst.EMPTY},
-         { Key.N, CharacterConst.EMPTY},
-         { Key.O, Tuple.Create(CharacterConst.OPERATION_CHARS, CharacterConst.OPERATION_CHARS)},
-         { Key.P, Tuple.Create(new[] { 'π', '¶' }, new[] { 'Π', '¶' })},
-         { Key.Q, Tuple.Create(CharacterConst.RELATIONS_CHARS, CharacterConst.NEGATED_RELATIONS_CHARS)},
 
-         { Key.R, CharacterConst.EMPTY},
-         { Key.S, Tuple.Create(CharacterConst.DOUBLE_STRUCK_CHARS,CharacterConst.DOUBLE_STRUCK_CHARS)},
-         { Key.T, CharacterConst.EMPTY},
-         { Key.U, CharacterConst.EMPTY},
-         { Key.V, CharacterConst.EMPTY},
-         { Key.W, CharacterConst.EMPTY},
-         { Key.X, CharacterConst.EMPTY},
-         { Key.Y, CharacterConst.EMPTY},
-         { Key.Z, CharacterConst.EMPTY},
+           
+         { Key.A, Tuple.Create(CharacterConst.ARROWS_CHARS_PART1, CharacterConst.ARROWS_CHARS_PART2)},
+         { Key.B, CharacterConst.EMPTY_TUPLE},
+         { Key.C, CharacterConst.EMPTY_TUPLE},
+         { Key.D, Tuple.Create(CharacterConst.DOUBLE_STRUCK_CHARS, CharacterConst.DOUBLE_STRUCK_CHARS)},
+         { Key.E, Tuple.Create(CharacterConst.BASIC_MATH_PART1, CharacterConst.BASIC_MATH_PART2)},
+         { Key.F, CharacterConst.EMPTY_TUPLE},
+         { Key.G, Tuple.Create(CharacterConst.GREEK_LETTERS_LOWERCASE, CharacterConst.GREEK_LETTERS_UPPERCASE)},
+         { Key.H, CharacterConst.EMPTY_TUPLE},
+         { Key.I, CharacterConst.EMPTY_TUPLE},
+         { Key.J, CharacterConst.EMPTY_TUPLE},
+         { Key.L, CharacterConst.EMPTY_TUPLE},
+         { Key.M, CharacterConst.EMPTY_TUPLE},
+         { Key.K, CharacterConst.EMPTY_TUPLE},
+         { Key.N, CharacterConst.EMPTY_TUPLE},
+         { Key.O, CharacterConst.EMPTY_TUPLE},
+         { Key.P, CharacterConst.EMPTY_TUPLE},
+         { Key.Q, Tuple.Create(CharacterConst.RELATIONS_CHARS, CharacterConst.NEGATED_RELATIONS_CHARS)},
+         
+         { Key.R, Tuple.Create(CharacterConst.ADVANCED_RELATIONAL_OPERATIONS, CharacterConst.ADVANCED_RELATIONAL_OPERATIONS)},
+         { Key.S, Tuple.Create(CharacterConst.NEGATED_ARROWS_CHARS, CharacterConst.NEGATED_ARROWS_CHARS)},
+         { Key.T, CharacterConst.EMPTY_TUPLE},
+         { Key.U, CharacterConst.EMPTY_TUPLE},
+         { Key.V, CharacterConst.EMPTY_TUPLE},
+         { Key.W, Tuple.Create(CharacterConst.BINARY_OPERATIONS, CharacterConst.BINARY_OPERATIONS)},
+         { Key.X, Tuple.Create(CharacterConst.BASIC_N_ARRAY_OPERATORS, CharacterConst.BASIC_N_ARRAY_OPERATORS)},
+         { Key.Y, CharacterConst.EMPTY_TUPLE},
+         { Key.Z, Tuple.Create(CharacterConst.GEOMETRY_CHARS, CharacterConst.GEOMETRY_CHARS)},
 
          // Numbers
          { Key.D0, Tuple.Create(new[]  { '☺', '☻', '∞', 'ø' }, new[]  { '☺', '☻', '∞', 'Ø' })},
@@ -59,17 +61,17 @@ namespace SymWin
          { Key.OemPeriod,  Tuple.Create(new[] { '≥' }, new[] { '≥' })},
          { Key.OemPlus,   Tuple.Create(new[] { '≈', '≠', '±' }, new[] { '≈', '≠', '±' })},
 
-         { Key.Decimal, CharacterConst.EMPTY },
+         { Key.Decimal, CharacterConst.EMPTY_TUPLE },
          { Key.Multiply, Tuple.Create(new[] { '×' }, new[] { '×' })},
-         { Key.OemOpenBrackets, CharacterConst.EMPTY }, // = Oem4
-         { Key.Oem8, CharacterConst.EMPTY },
+         { Key.OemOpenBrackets, CharacterConst.EMPTY_TUPLE }, // = Oem4
+         { Key.Oem8, CharacterConst.EMPTY_TUPLE },
          { Key.OemQuestion, Tuple.Create(new[] { '¿'}, new[] { '¿' })},
-         { Key.OemBackslash, CharacterConst.EMPTY }, // Equals 102
-         { Key.OemMinus, CharacterConst.EMPTY },
+         { Key.OemBackslash, CharacterConst.EMPTY_TUPLE }, // Equals 102
+         { Key.OemMinus, CharacterConst.EMPTY_TUPLE },
          { Key.OemPipe, Tuple.Create(new[] { '¦' }, new[] { '¦' }) },
-         { Key.OemSemicolon, CharacterConst.EMPTY }, // = Oem1 = Oem102
-         { Key.OemTilde, CharacterConst.EMPTY },
-         { Key.Subtract, CharacterConst.EMPTY },
+         { Key.OemSemicolon, CharacterConst.EMPTY_TUPLE }, // = Oem1 = Oem102
+         { Key.OemTilde, CharacterConst.EMPTY_TUPLE },
+         { Key.Subtract, CharacterConst.EMPTY_TUPLE },
       };
 
         public static void UpdateKey(Key key, Char[] lowerCase, Char[] upperCase)
