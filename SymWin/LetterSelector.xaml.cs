@@ -79,48 +79,41 @@ namespace SymWin
             this.Loaded += (_, __) => SelectNext();
         }
 
-        UIElement _prevTextBox;
+        TextBox _prevaAimatedTextBox;
+        Storyboard _prevStoryboard;
 
-        protected readonly DoubleAnimation WidthAnimation = new DoubleAnimation();
-        protected readonly DoubleAnimation HeightAnimation = new DoubleAnimation();
-        protected readonly Storyboard _textBoxStoryboard = new Storyboard();
-
-        private void SetZoom(object sender)
+        private void SetAnimation(object sender)
         {
-            var focusedTextBox = sender as UIElement;
+            var focusedTextBox = sender as TextBox;
             if (focusedTextBox != null)
             {
-                if (_prevTextBox != null)
+                if (_prevStoryboard != null)
                 {
-                    //_prevTextBox.Width = focusedTextBox.Width;
-                    //_prevTextBox.Height = focusedTextBox.Height;
+                    _prevStoryboard.Stop();
                 }
 
-                _prevTextBox = focusedTextBox;
+                _prevaAimatedTextBox = focusedTextBox;
 
-                //focusedTextBox.Width += 50;
-                //focusedTextBox.Height += 50;
-
-                SetAnimation(1d, 3, "RenderTransform.(ScaleTransform.ScaleX)", WidthAnimation, focusedTextBox);
-                SetAnimation(1d, 3, "RenderTransform.(ScaleTransform.ScaleY)", HeightAnimation, focusedTextBox);
-
-                if (_textBoxStoryboard.Children.Count == 0)
+                var fade = new DoubleAnimation()
                 {
-                    _textBoxStoryboard.Children.Add(WidthAnimation);
-                    _textBoxStoryboard.Children.Add(HeightAnimation);
-                }
+                    From = 0,
+                    To = 1,
+                    Duration = TimeSpan.FromSeconds(1),
+                };
 
-                _textBoxStoryboard.Begin();
-                _textBoxStoryboard.Completed += _textBoxStoryboard_Completed;
+                Storyboard.SetTarget(fade, focusedTextBox);
+                Storyboard.SetTargetProperty(fade, new PropertyPath(Button.OpacityProperty));
+
+                _prevStoryboard = new Storyboard();
+                _prevStoryboard.Children.Add(fade);
+
+                _prevStoryboard.Begin();
             }
         }
 
-        private void _textBoxStoryboard_Completed(object sender, EventArgs e)
-        {
-          
-        }
+        
 
-        private void SetAnimation(double from, double to, string targetProp, DoubleAnimation animation, UIElement AnimatedElement)
+        private void SetAnimation(double from, double to, string targetProp, DoubleAnimation animation, TextBox AnimatedElement)
         {
             animation.EasingFunction = new CubicEase();
 
@@ -130,7 +123,6 @@ namespace SymWin
             animation.To = to;
 
             Storyboard.SetTarget(animation, AnimatedElement);
-            Storyboard.SetTargetProperty(animation, new PropertyPath(targetProp));
         }
 
 
@@ -177,7 +169,7 @@ namespace SymWin
             var txtBox = _mTextBoxes[_mActiveIndex];
 
             txtBox.Focus();
-            SetZoom(txtBox);
+            SetAnimation((object)txtBox);
         }
 
         public void SelectPrevious()
