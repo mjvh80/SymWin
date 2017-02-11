@@ -15,7 +15,9 @@ To type an uppercase symbol, simply add SHIFT to the above key sequence.
 
 To cycle options keep pressing the letter key, or use the arrow keys on the keyboard. You can also use the mouse to select a symbol. To go backwards, hold the ALT key in addition to the other keys.
 
-This is just an initial rough version which is working well. It works particularly well for Microsoft applications which use the Win32 Caret api (SetCaretPos in particular), other applications work but without positioning of the popup at the caret. Instead, the centre of the screen is chosen for these applications.
+**IMPORTANT**
+This is just an initial rough version which is working well for me, but has some known issues.
+It works particularly well for Microsoft applications which use the Win32 Caret api (SetCaretPos in particular), other applications work but without positioning of the popup at the caret. Instead, the centre of the screen is chosen for these applications.
 
 It is possible to configure one's symbol settings, these will be saved on a per-user basis (see tasktray menu).
 
@@ -25,7 +27,7 @@ How To
 ------
 A ready-made version can be found here: https://github.com/mjvh80/SymWin/releases .
 
-It is easy to build, however, my running the ```build.cmd``` script or using Visual Studio. The steps are:
+It is easy to build, however, by running the ```build.cmd``` script or using Visual Studio. The steps are:
 
 - clone this repository
 - run build.cmd or use Visual Studio
