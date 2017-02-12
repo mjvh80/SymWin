@@ -16,10 +16,5 @@ namespace SymWin
          using (var xmlReader = XmlReader.Create(new StringReader(XamlWriter.Save(o))))
             return (T)XamlReader.Load(xmlReader);
       }
-
-      public static TVisual Clone<TVisual>(this TVisual visual) where TVisual : Visual 
-      {
-         return CloneWPFObject(visual);
-      }
    }
 }

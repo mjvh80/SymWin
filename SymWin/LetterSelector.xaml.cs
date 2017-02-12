@@ -8,134 +8,184 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace SymWin
 {
-   /// <summary>
-   /// Interaction logic for LetterSelector.xaml
-   /// </summary>
-   public partial class LetterSelector : Window
-   {
-      private readonly TextBox[] _mTextBoxes;
-      private Tuple<Char[], Char[]> _mLetters;
+    /// <summary>
+    /// Interaction logic for LetterSelector.xaml
+    /// </summary>
+    public partial class LetterSelector : Window
+    {
+        private readonly TextBox[] _mTextBoxes;
+        private Tuple<Char[], Char[]> _mLetters;
 
-      public readonly Boolean IsEmpty;
+        public readonly Boolean IsEmpty;
 
-      public LetterSelector(Key key, Tuple<Char[], Char[]> letters)
-      {
-         if (letters == null) throw new ArgumentNullException("letters");
-         if (letters.Item1 == null || letters.Item2 == null || letters.Item1.Length == 0 || letters.Item1.Length != letters.Item2.Length)
-            throw new ArgumentException("Invalid letter definition, unequal lower and upper case sequence length or length 0.");
+        public LetterSelector(Key key, Tuple<Char[], Char[]> letters)
+        {
+            if (letters == null) throw new ArgumentNullException("letters");
+            if (letters.Item1 == null || letters.Item2 == null || letters.Item1.Length == 0 || letters.Item1.Length != letters.Item2.Length)
+                throw new ArgumentException("Invalid letter definition, unequal lower and upper case sequence length or length 0.");
 
-         InitializeComponent();
+            InitializeComponent();
 
-         var letterTemplate = Utils.CloneWPFObject(this.LetterPanel.Children.Cast<TextBox>().First());
-         var width = 0.0;
+            var letterTemplate = Utils.CloneWPFObject(this.LetterPanel.Children.Cast<TextBox>().First());
+            var width = 0.0;
 
-         // Remove sample children.
-         this.LetterPanel.Children.Clear();
+            // Remove sample children.
+            this.LetterPanel.Children.Clear();
 
-         _mTextBoxes = new TextBox[letters.Item1.Length];
+            _mTextBoxes = new TextBox[letters.Item1.Length];
 
-         // Add letters in order of appearance.
-         for (var i = 0; i < letters.Item1.Length; i++)
-         {
-            var letter = letters.Item1[i];
-            var newLetter = Utils.CloneWPFObject(letterTemplate);
-
-            // Todo: it seems our "clone" is not cloning events, so let's hook it here.
-            newLetter.PreviewMouseUp += OnMouseUp;
-
-            // Adjust border thickness. It'd be nice if we can (?) do this in xaml using style ala css pseudo selectors
-            var borderThick = newLetter.BorderThickness;
-            borderThick.Left = borderThick.Right = 1;
-            if (i == 0)
+            // Add letters in order of appearance.
+            for (var i = 0; i < letters.Item1.Length; i++)
             {
-               borderThick.Right = letters.Item1.Length > 1 ? 1 : 2;
-               borderThick.Left = 2;
+                var letter = letters.Item1[i];
+                var newLetter = Utils.CloneWPFObject(letterTemplate);
+
+                // Todo: it seems our "clone" is not cloning events, so let's hook it here.
+                newLetter.PreviewMouseUp += OnMouseUp;
+                // Adjust border thickness. It'd be nice if we can (?) do this in xaml using style ala css pseudo selectors
+                var borderThick = newLetter.BorderThickness;
+                borderThick.Left = borderThick.Right = 1;
+                if (i == 0)
+                {
+                    borderThick.Right = letters.Item1.Length > 1 ? 1 : 2;
+                    borderThick.Left = 2;
+                }
+                else if (i == letters.Item1.Length - 1)
+                {
+                    borderThick.Left = letters.Item1.Length > 1 ? 1 : 2;
+                    borderThick.Right = 2;
+                }
+                newLetter.BorderThickness = borderThick;
+
+                newLetter.Text = letter.ToString();
+
+                this.LetterPanel.Children.Add(newLetter);
+
+                _mTextBoxes[i] = newLetter;
+                width += newLetter.Width;
             }
-            else if (i == letters.Item1.Length - 1)
+
+            this._mLetters = letters;
+
+            // Restrict window size to panel width.
+            this.Width = width;
+            this.Height = letterTemplate.Height;
+            this.Key = key;
+
+            this.Loaded += (_, __) => SelectNext();
+        }
+
+        TextBox _prevaAimatedTextBox;
+        Storyboard _prevStoryboard;
+
+        private void SetAnimation(object sender)
+        {
+            var focusedTextBox = sender as TextBox;
+            if (focusedTextBox != null)
             {
-               borderThick.Left = letters.Item1.Length > 1 ? 1 : 2;
-               borderThick.Right = 2;
+                if (_prevStoryboard != null)
+                {
+                    _prevStoryboard.Stop();
+                }
+
+                _prevaAimatedTextBox = focusedTextBox;
+
+                var fade = new DoubleAnimation()
+                {
+                    From = 0,
+                    To = 1,
+                    Duration = TimeSpan.FromSeconds(1),
+                };
+
+                Storyboard.SetTarget(fade, focusedTextBox);
+                Storyboard.SetTargetProperty(fade, new PropertyPath(Button.OpacityProperty));
+
+                _prevStoryboard = new Storyboard();
+                _prevStoryboard.Children.Add(fade);
+
+                _prevStoryboard.Begin();
             }
-            newLetter.BorderThickness = borderThick;
+        }
 
-            newLetter.Text = letter.ToString();
+        
 
-            this.LetterPanel.Children.Add(newLetter);
+        private void SetAnimation(double from, double to, string targetProp, DoubleAnimation animation, TextBox AnimatedElement)
+        {
+            animation.EasingFunction = new CubicEase();
 
-            _mTextBoxes[i] = newLetter;
-            width += newLetter.Width;
-         }
+            animation.Duration = TimeSpan.FromSeconds(value : 0.5);
 
-         this._mLetters = letters;
+            animation.From = from;
+            animation.To = to;
 
-         // Restrict window size to panel width.
-         this.Width = width;
-         this.Height = letterTemplate.Height;
-         this.Key = key;
+            Storyboard.SetTarget(animation, AnimatedElement);
+        }
 
-         this.Loaded += (_, __) => SelectNext();
-      }
 
-      public readonly Key Key;
+        public readonly Key Key;
 
-      public Char SelectedLetter
-      {
-         get
-         {
-            return _mTextBoxes[_mActiveIndex].Text[0];
-         }
-      }
+        public char SelectedLetter
+        {
+            get
+            {
+                return _mTextBoxes[_mActiveIndex].Text[0];
+            }
+        }
 
-      private Boolean _mIsLowerCase = true;
+        private Boolean _mIsLowerCase = true;
 
-      public void ToUpper()
-      {
-         if (!_mIsLowerCase) return;
+        public void ToUpper()
+        {
+            if (!_mIsLowerCase) return;
 
-         for (var i = 0; i < _mTextBoxes.Length; i++)
-            _mTextBoxes[i].Text = _mLetters.Item2[i].ToString();
+            for (var i = 0; i < _mTextBoxes.Length; i++)
+                _mTextBoxes[i].Text = _mLetters.Item2[i].ToString();
 
-         _mIsLowerCase = false;
-      }
+            _mIsLowerCase = false;
+        }
 
-      public void ToLower()
-      {
-         if (_mIsLowerCase) return;
+        public void ToLower()
+        {
+            if (_mIsLowerCase) return;
 
-         for (var i = 0; i < _mTextBoxes.Length; i++)
-            _mTextBoxes[i].Text = _mLetters.Item1[i].ToString();
+            for (var i = 0; i < _mTextBoxes.Length; i++)
+                _mTextBoxes[i].Text = _mLetters.Item1[i].ToString();
 
-         _mIsLowerCase = true;
-      }
+            _mIsLowerCase = true;
+        }
 
-      private Int32 _mActiveIndex = -1;
+        private Int32 _mActiveIndex = -1;
 
-      public void SelectNext()
-      {
-         var count = _mTextBoxes.Length;
+        public void SelectNext()
+        {
+            var count = _mTextBoxes.Length;
 
-         _mActiveIndex = (_mActiveIndex + 1) % count;
+            _mActiveIndex = (_mActiveIndex + 1) % count;
 
-         _mTextBoxes[_mActiveIndex].Focus();
-      }
+            var txtBox = _mTextBoxes[_mActiveIndex];
 
-      public void SelectPrevious()
-      {
-         var count = _mTextBoxes.Length;
+            txtBox.Focus();
+            SetAnimation((object)txtBox);
+        }
 
-         _mActiveIndex = (count + _mActiveIndex - 1) % count;
+        public void SelectPrevious()
+        {
+            var count = _mTextBoxes.Length;
 
-         _mTextBoxes[_mActiveIndex].Focus();
-      }
+            _mActiveIndex = (count + _mActiveIndex - 1) % count;
 
-      private void TextBox_TextChanged(Object sender, TextChangedEventArgs e)
-      {
-      }
+            _mTextBoxes[_mActiveIndex].Focus();
+        }
 
-#if  false
+        private void TextBox_TextChanged(Object sender, TextChangedEventArgs e)
+        {
+        }
+
+#if false
 
       public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
       {
@@ -159,18 +209,18 @@ namespace SymWin
 
 #endif
 
-      private void OnWindowDeactivated(Object sender, EventArgs e)
-      {
-         this.Visibility = System.Windows.Visibility.Hidden;
-      }
+        private void OnWindowDeactivated(Object sender, EventArgs e)
+        {
+            this.Visibility = System.Windows.Visibility.Hidden;
+        }
 
-      private void OnMouseUp(Object sender, MouseButtonEventArgs e)
-      {
-         var textBox = e.Source as TextBox;
-         if (textBox == null) return;
-         _mActiveIndex = Array.IndexOf(_mTextBoxes, textBox);
-         textBox.Focus();
-         Handler.HandleMouseUp();
-      }
-   }
+        private void OnMouseUp(Object sender, MouseButtonEventArgs e)
+        {
+            var textBox = e.Source as TextBox;
+            if (textBox == null) return;
+            _mActiveIndex = Array.IndexOf(_mTextBoxes, textBox);
+            textBox.Focus();
+            Handler.HandleMouseUp();
+        }
+    }
 }

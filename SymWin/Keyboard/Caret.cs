@@ -80,21 +80,6 @@ namespace SymWin.Keyboard
          info.cbSize = (UInt32)Marshal.SizeOf(info);
          GetGUIThreadInfo(0, out info);
 
-         //var caret = info.rcCaret;
-         //if (caret.Left == 0 && caret.Bottom == 0)
-         //{
-         //   // Try again using a more specific thread id.
-         //   var curThreadId = GetCurrentThreadId();
-         //   var threadId = GetWindowThreadProcessId(window, IntPtr.Zero);
-         //   var b1 = AttachThreadInput(curThreadId, threadId, true)
-         //   var focus = GetFocus();
-         //   //var b2 = GetGUIThreadInfo(threadId, out info);
-         //   //caret = info.rcCaret;
-         //   Point point;
-         //   GetCaretPos(out point);
-         //   AttachThreadInput(curThreadId, threadId, false);
-         //}
-
          Point caretPos;
          caretPos.X = info.rcCaret.Left;
          caretPos.Y = info.rcCaret.Bottom;

@@ -3,42 +3,46 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Focusable="False"
         Title="Letter Selector" Height="110" Width="219" WindowStyle="None" AllowsTransparency="True"
         BorderThickness="0" Topmost="True" Deactivated="OnWindowDeactivated" ShowInTaskbar="False">
-   <Window.Resources>
-      <Style TargetType="TextBox">
-         <Style.Triggers>
-            <Trigger Property="UIElement.IsFocused" Value="True">
-               <Setter Property="Background" Value="Black" />
-               <Setter Property="Foreground" Value="White" />
-            </Trigger>
-         </Style.Triggers>
-         <Setter Property="Cursor" Value="Arrow" />
-         <Setter Property="Template">
-            <Setter.Value>
-               <ControlTemplate TargetType="TextBox">
-                  <Border Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
-                     <ScrollViewer  Margin="{TemplateBinding Padding}" VerticalScrollBarVisibility="Hidden" x:Name="PART_ContentHost" Foreground="{TemplateBinding Foreground}"/>
-                  </Border>
-                  <ControlTemplate.Triggers>
-                     <Trigger Property="IsFocused" Value="True">
-                        <Setter TargetName="Border" Property="BorderBrush" Value="black"/>
-                     </Trigger>
-                     <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                        <Setter TargetName="Border" Property="BorderBrush" Value="black"/>
-                     </Trigger>
-                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="Border" Property="BorderBrush" Value="black"/>
-                        <Setter Property="Background" Value="LightGray" />
-                     </Trigger>
-                  </ControlTemplate.Triggers>
-               </ControlTemplate>
-            </Setter.Value>
-         </Setter>
-      </Style>
-   </Window.Resources>
-   <DockPanel Name="LetterPanel">
-      <TextBox Name="FirstBox" IsReadOnly="True" ToolTip="{x:Null}"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" Text="a" VerticalAlignment="Top" Width="29" FontSize="20" TextAlignment="Center" BorderBrush="Black" BorderThickness="2,2,1,2" SelectionBrush="Black" PreviewMouseUp="OnMouseUp"/>
-      <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" Text="ä" VerticalAlignment="Top" Width="29" FontSize="20" TextAlignment="Center" BorderBrush="Black" BorderThickness="1,2" TextChanged="TextBox_TextChanged" SelectionBrush="Black"/>
-      <TextBox IsReadOnly="True"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" Text="α" VerticalAlignment="Top" Width="29" FontSize="20" TextAlignment="Center" BorderBrush="Black" BorderThickness="1,2,2,2" TextChanged="TextBox_TextChanged" SelectionBrush="Black"/>
-   </DockPanel>
-
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="UIElement.IsFocused" Value="True">
+                    <Setter Property="Background" Value="Black" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+            </Style.Triggers>
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Name="Border" Background="{TemplateBinding Background}" 
+                          BorderBrush="{TemplateBinding BorderBrush}" 
+                          BorderThickness="{TemplateBinding BorderThickness}">
+                            <ScrollViewer  Margin="{TemplateBinding Padding}" 
+                                    VerticalScrollBarVisibility="Hidden" 
+                                    x:Name="PART_ContentHost" 
+                                    Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="black"/>
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="black"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="black"/>
+                                <Setter Property="Background" Value="LightGray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <DockPanel Name="LetterPanel">
+        <TextBox Name="FirstBox" IsReadOnly="True" ToolTip="{x:Null}" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" Text="a" VerticalAlignment="Top" Width="29" FontSize="20" TextAlignment="Center" BorderBrush="Black" BorderThickness="2,2,1,2" SelectionBrush="Black" PreviewMouseUp="OnMouseUp"/>
+        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" Text="ä" VerticalAlignment="Top" Width="29" FontSize="20" TextAlignment="Center" BorderBrush="Black" BorderThickness="1,2" SelectionBrush="Black"/>
+        <TextBox IsReadOnly="True"  HorizontalAlignment="Left" Height="31" TextWrapping="Wrap" Text="α" VerticalAlignment="Top" Width="29" FontSize="20" TextAlignment="Center" BorderBrush="Black" BorderThickness="1,2,2,2" TextChanged="TextBox_TextChanged" SelectionBrush="Black"/>
+    </DockPanel>
 </Window>
