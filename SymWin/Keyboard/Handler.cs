@@ -539,23 +539,23 @@ namespace SymWin.Keyboard
          ///</summary>
          F16 = 0x7F,
          ///<summary>
-         ///F17 key  
+         ///F17 key
          ///</summary>
          F17 = 0x80,
          ///<summary>
-         ///F18 key  
+         ///F18 key
          ///</summary>
          F18 = 0x81,
          ///<summary>
-         ///F19 key  
+         ///F19 key
          ///</summary>
          F19 = 0x82,
          ///<summary>
-         ///F20 key  
+         ///F20 key
          ///</summary>
          F20 = 0x83,
          ///<summary>
-         ///F21 key  
+         ///F21 key
          ///</summary>
          F21 = 0x84,
          ///<summary>
@@ -563,11 +563,11 @@ namespace SymWin.Keyboard
          ///</summary>
          F22 = 0x85,
          ///<summary>
-         ///F23 key  
+         ///F23 key
          ///</summary>
          F23 = 0x86,
          ///<summary>
-         ///F24 key  
+         ///F24 key
          ///</summary>
          F24 = 0x87,
          ///<summary>
@@ -977,6 +977,14 @@ namespace SymWin.Keyboard
          public uint dwFlags;
       }
 
+      public enum DpiType
+      {
+         EFFECTIVE = 0,
+         ANGULAR = 1,
+         RAW = 2,
+      }
+
+      private const Int32 MONITOR_DEFAULTTOPRIMARY = 0x00000001;
       private const Int32 MONITOR_DEFAULTTONEAREST = 0x00000002;
 
       [DllImport("user32.dll")]
@@ -987,6 +995,9 @@ namespace SymWin.Keyboard
 
       [DllImport("user32.dll")]
       static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
+
+      [DllImport("Shcore.dll")]
+      private static extern IntPtr GetDpiForMonitor([In]IntPtr hmonitor, [In]DpiType dpiType, [Out]out uint dpiX, [Out]out uint dpiY);
 
       [DllImport("USER32.dll")]
       static extern short GetKeyState(VirtualKeyShort nVirtKey);
@@ -1140,6 +1151,21 @@ namespace SymWin.Keyboard
             else
                monitor = MonitorFromPoint(position, MONITOR_DEFAULTTONEAREST);
 
+            // As far as I understand, WPF's coordinates are relative to the default monitor.
+            // This means that once we've got raw pixels, we need to scale these relative to the DPI of the default
+            // monitor in order to get WPF coordinates.
+            // In the below we'll do everything in raw pixels prior to scaling to WPF coordinates.
+
+            // The position is measured in dpi of the default monitor.
+            IntPtr defaultMonitor = MonitorFromPoint(default(Point), MONITOR_DEFAULTTOPRIMARY);
+            UInt32 mainDpiX, mainDpiY;
+            Double mainScale = 1.0;
+            if (GetDpiForMonitor(defaultMonitor, DpiType.EFFECTIVE, out mainDpiX, out mainDpiY) == IntPtr.Zero)
+            {
+               // Scale positioning.
+               mainScale = mainDpiX / 96.0;
+            }
+
             if (monitor != IntPtr.Zero)
             {
                // Get monitor size.
@@ -1147,27 +1173,38 @@ namespace SymWin.Keyboard
                info.cbSize = Marshal.SizeOf(info);
                if (GetMonitorInfo(monitor, ref info))
                {
+                  // Convert width and height from WPF coordinates to raw pixels using the scale of the default monitor.
+                  var width = _sActiveSelectorWindow.ActualWidth * mainScale;
+                  var height = _sActiveSelectorWindow.ActualHeight * mainScale;
+
                   if (position.X == 0 && position.Y == 0)
                   {
                      // This can happen in two cases:
                      // - there is no caret
                      // - the application does not use win32 caret api
                      // Slap the popup in the middle of the screen as workaround for now.
-                     position.X = info.rcWork.Left + (info.rcWork.Right - info.rcWork.Left) / 2 - (Int32)(_sActiveSelectorWindow.ActualWidth / 2.0);
-                     position.Y = info.rcWork.Top + (info.rcWork.Bottom - info.rcWork.Top) / 2 - (Int32)(_sActiveSelectorWindow.ActualHeight / 2.0);
+                     position.X = info.rcWork.Left + (info.rcWork.Right - info.rcWork.Left) / 2 - (Int32)(width / 2.0);
+                     position.Y = info.rcWork.Top + (info.rcWork.Bottom - info.rcWork.Top) / 2 - (Int32)(height / 2.0);
                   }
 
                   // Adjust position to fit within the given dimensions.
-                  if (position.X + _sActiveSelectorWindow.ActualWidth > info.rcWork.Right)
-                     position.X = info.rcWork.Right - (Int32)_sActiveSelectorWindow.ActualWidth;
-                  if (position.Y + _sActiveSelectorWindow.ActualHeight > info.rcWork.Bottom)
-                     position.Y = info.rcWork.Bottom - (Int32)_sActiveSelectorWindow.ActualHeight;
+                  if (position.X + width > info.rcWork.Right)
+                     position.X = info.rcWork.Right - (Int32)width;
+                  if (position.Y + height > info.rcWork.Bottom)
+                     position.Y = info.rcWork.Bottom - (Int32)height;
                }
             }
 
             // If we got nowhere reasonable to put the popup, mark as handled and don't show it.
             if (position.X == 0 && position.Y == 0)
                return true;
+
+            // Finally, convert the position from raw pixels to WPF coordinates.
+            if (mainScale > 1.0)
+            {
+               position.X = (Int32)Math.Round(position.X / mainScale);
+               position.Y = (Int32)Math.Round(position.Y / mainScale);
+            }
 
             _ShowPopup(e.ModifierAnyShift, position.X, position.Y);
             return true;
