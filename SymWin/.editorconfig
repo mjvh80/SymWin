@@ -1,0 +1,11 @@
+#Editor stops searching for additional .editorconfig in folders above this one if set to true
+root = true
+
+#Universal rules
+[*]
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+charset = utf-8
+indent_style = space
+indent_size = 3
