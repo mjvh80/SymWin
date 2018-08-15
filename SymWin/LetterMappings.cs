@@ -22,8 +22,8 @@ namespace SymWin
          { Key.B, Tuple.Create(new[] { 'β' },
                                new[] { 'Β' })},
 
-         { Key.C, Tuple.Create(new[] { 'ç', 'γ', '©' },
-                               new[] { 'Ç', 'Γ', '©' })},
+         { Key.C, Tuple.Create(new[] { 'ç', '©' },
+                               new[] { 'Ç', '©' })},
 
          { Key.D, Tuple.Create(new[] { 'δ' },
                                new[] { 'Δ' })},
@@ -34,7 +34,8 @@ namespace SymWin
          { Key.F, Tuple.Create(new[] { 'ƒ' },
                                new[] { 'Ƒ' })},
 
-         { Key.G, _sEmpty},
+         { Key.G, Tuple.Create(new[] { 'γ' },
+                               new[] { 'Γ' })},
 
          { Key.H, Tuple.Create(new[] { 'ħ' },
                                new[] { 'Ħ' })},
@@ -64,14 +65,14 @@ namespace SymWin
 
          { Key.Q, _sEmpty},
 
-         { Key.R, Tuple.Create(new[] { '®', 'ρ' },
-                               new[] { '®', 'Ρ' })},
+         { Key.R, Tuple.Create(new[] { 'ρ', '®' },
+                               new[] { 'Ρ', '®' })},
 
          { Key.S, Tuple.Create(new[] { 'ß', 'š', 'σ', 'ς' },
                                new[] { 'ẞ', 'Š', 'Σ', 'Σ' })},
 
-         { Key.T, Tuple.Create(new[] { '™', 'θ', 'τ', 'þ' },
-                               new[] { '™', 'Θ', 'τ', 'Þ' })},
+         { Key.T, Tuple.Create(new[] { 'θ', 'τ', 'þ', '™' },
+                               new[] { 'Θ', 'τ', 'Þ', '™' })},
 
          { Key.U, Tuple.Create(new[] { 'ú', 'ù', 'ü', 'û' },
                                new[] { 'Ú', 'Ù', 'Ü', 'Û' })},
@@ -84,8 +85,8 @@ namespace SymWin
          { Key.X, Tuple.Create(new[] { 'Ξ', 'χ' },
                                new[] { 'ξ', 'Χ' })},
 
-         { Key.Y, Tuple.Create(new[] { 'ý', 'ÿ' },
-                               new[] { 'Ý', 'Ÿ'})},
+         { Key.Y, Tuple.Create(new[] { 'ý', 'ỳ', 'ÿ', 'ŷ' },
+                               new[] { 'Ý', 'Ỳ', 'Ÿ', 'Ŷ' })},
 
          { Key.Z, Tuple.Create(new[] { 'ζ' },
                                new[] { 'Ζ' })},
