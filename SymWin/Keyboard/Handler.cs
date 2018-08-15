@@ -1304,12 +1304,12 @@ namespace SymWin.Keyboard
 
                   ((SynchronizationContext)context).Post(_ =>
                   {
-                     SendInput(1, new[] { keyDown, keyUp }, Marshal.SizeOf(keyDown));
+                     SendInput(2, new[] { keyDown, keyUp }, Marshal.SizeOf(keyDown));
                   }, null);
                }, SynchronizationContext.Current);
          else
          {
-            SendInput(1, new[] { keyDown, keyUp }, Marshal.SizeOf(keyDown));
+            SendInput(2, new[] { keyDown, keyUp }, Marshal.SizeOf(keyDown));
          }
       }
    }
