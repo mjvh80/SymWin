@@ -1,4 +1,4 @@
-﻿/*
+/*
  * © Marcus van Houdt 2014
  */
 
@@ -16,42 +16,89 @@ namespace SymWin
       public static readonly Dictionary<Key, Tuple<Char[], Char[]>> KeysToSymbols = new Dictionary<Key, Tuple<Char[], Char[]>>
       {
          // Initial rough mapping for letters, not too much thought has gone into this yet.
-         { Key.A, Tuple.Create(new[] { 'ä', 'å', 'à', 'á', 'α', 'æ' }, new[] { 'Ä', 'Å', 'À', 'Á', 'א', 'Æ' })},
-         { Key.B, Tuple.Create(new[] { 'β' }, new[] { 'β' })},
-         { Key.C, Tuple.Create(new[] { 'ç', 'γ', '©' }, new[] { 'Ç', 'Γ', '©' })},
-         { Key.D, Tuple.Create(new[] { 'Þ', 'ð', 'δ' }, new[] { 'Þ', 'Ð', 'Δ' })},
-         { Key.E, Tuple.Create(new[] { 'ë', 'è', 'é', 'ê', 'ε', 'η' }, new[] { 'Ë', 'È', 'É', 'Ê', 'Ε', 'Η' })},
-         { Key.F, Tuple.Create(new[] { 'ƒ', 'θ' }, new[] { 'Ƒ', 'Θ' })},
+         { Key.A, Tuple.Create(new[] { 'á', 'à', 'ä', 'å', 'α', 'æ' },
+                               new[] { 'Á', 'À', 'Ä', 'Å', 'Α', 'Æ' })},
+
+         { Key.B, Tuple.Create(new[] { 'β' },
+                               new[] { 'Β' })},
+
+         { Key.C, Tuple.Create(new[] { 'ç', 'γ', '©' },
+                               new[] { 'Ç', 'Γ', '©' })},
+
+         { Key.D, Tuple.Create(new[] { 'δ' },
+                               new[] { 'Δ' })},
+
+         { Key.E, Tuple.Create(new[] { 'é', 'è', 'ë', 'ê', 'ε', 'ð', 'η' },
+                               new[] { 'É', 'È', 'Ë', 'Ê', 'Ε', 'Ð', 'Η' })},
+
+         { Key.F, Tuple.Create(new[] { 'ƒ' },
+                               new[] { 'Ƒ' })},
+
          { Key.G, _sEmpty},
-         { Key.H, Tuple.Create(new[] { 'ħ'}, new[]  { 'Ħ' })},
-         { Key.I, Tuple.Create(new[] { 'ì', 'í', 'î', 'ï', 'ι' }, new[] { 'Ì', 'Í', 'Î', 'Ï', 'Ι' })},
+
+         { Key.H, Tuple.Create(new[] { 'ħ' },
+                               new[] { 'Ħ' })},
+
+         { Key.I, Tuple.Create(new[] { 'í', 'ì', 'ï', 'î', 'ι' },
+                               new[] { 'Í', 'Ì', 'Ï', 'Î', 'Ι' })},
+
          { Key.J, _sEmpty},
-         { Key.L, Tuple.Create(new[] { 'λ' }, new[] { 'Λ' })},
-         { Key.M, Tuple.Create(new[] { 'µ' }, new[] { 'µ' })},
-         { Key.K, Tuple.Create(new[] { 'κ' }, new[] { 'κ' })},
-         { Key.N, Tuple.Create(new[] { 'ñ', 'ν' }, new[] { 'Ñ', 'ν' })},
-         { Key.O, Tuple.Create(new[] { 'ö', 'ò', 'ó', 'ô', 'õ', 'ø' }, new[] { 'Ö', 'Ò', 'Ó', 'Ô', 'Õ', 'Ø' })},
-         { Key.P, Tuple.Create(new[] { 'π', '¶' }, new[] { 'Π', '¶' })},
+
+         { Key.L, Tuple.Create(new[] { 'λ' },
+                               new[] { 'Λ' })},
+
+         { Key.M, Tuple.Create(new[] { 'µ' },
+                               new[] { 'Μ' })},
+
+         { Key.K, Tuple.Create(new[] { 'κ' },
+                               new[] { 'Κ' })},
+
+         { Key.N, Tuple.Create(new[] { 'ñ', 'ν', 'ŋ' },
+                               new[] { 'Ñ', 'Ν', 'Ŋ' })},
+
+         { Key.O, Tuple.Create(new[] { 'ó', 'ò', 'ö', 'ô', 'õ', 'ø', 'ω' },
+                               new[] { 'Ó', 'Ò', 'Ö', 'Ô', 'Õ', 'Ø', 'Ω' })},
+
+         { Key.P, Tuple.Create(new[] { 'π', '¶' },
+                               new[] { 'Π', '¶' })},
+
          { Key.Q, _sEmpty},
-         { Key.R, Tuple.Create(new[] { '®', 'ρ' }, new[] { '®', 'Ρ' })},
-         { Key.S, Tuple.Create(new[] { 'ß', 'š', 'σ' }, new[] { 'ß', 'Š', 'Σ' })},
-         { Key.T, Tuple.Create(new[] { 'τ', '™' }, new[] { 'τ', '™' })},
-         { Key.U, Tuple.Create(new[] { 'ù', 'ú', 'û', 'ü' }, new[] { 'Ù', 'Ú', 'Û', 'Ü' })},
+
+         { Key.R, Tuple.Create(new[] { '®', 'ρ' },
+                               new[] { '®', 'Ρ' })},
+
+         { Key.S, Tuple.Create(new[] { 'ß', 'š', 'σ', 'ς' },
+                               new[] { 'ẞ', 'Š', 'Σ', 'Σ' })},
+
+         { Key.T, Tuple.Create(new[] { '™', 'θ', 'τ', 'þ' },
+                               new[] { '™', 'Θ', 'τ', 'Þ' })},
+
+         { Key.U, Tuple.Create(new[] { 'ú', 'ù', 'ü', 'û' },
+                               new[] { 'Ú', 'Ù', 'Ü', 'Û' })},
+
          { Key.V, _sEmpty},
-         { Key.W, Tuple.Create(new[] { 'ω' }, new[] { 'Ω' })},
-         { Key.X, Tuple.Create(new[] { 'χ', '×' }, new[] { 'χ', '×' })},
-         { Key.Y, Tuple.Create(new[] { 'ý', 'ÿ'}, new[] { 'Ý', 'Ÿ'})},
-         { Key.Z, Tuple.Create(new[] { 'ζ' }, new[] { 'ζ' })},
+
+         { Key.W, Tuple.Create(new[] { 'ẃ', 'ẁ', 'ẅ', 'ŵ' },
+                               new[] { 'Ẃ', 'Ẁ', 'Ẅ', 'Ŵ' })},
+
+         { Key.X, Tuple.Create(new[] { 'Ξ', 'χ' },
+                               new[] { 'ξ', 'Χ' })},
+
+         { Key.Y, Tuple.Create(new[] { 'ý', 'ÿ' },
+                               new[] { 'Ý', 'Ÿ'})},
+
+         { Key.Z, Tuple.Create(new[] { 'ζ' },
+                               new[] { 'Ζ' })},
 
          // Numbers
-         { Key.D0, Tuple.Create(new[]  { '☺', '☻', '∞', 'ø' }, new[]  { '☺', '☻', '∞', 'Ø' })},
+         { Key.D0, Tuple.Create(new[] { '☺', '☻', '∞', 'ø' }, new[]  { '☺', '☻', '∞', 'Ø' })},
          { Key.D1, Tuple.Create(new[] { '¡', '‼', '¹' }, new[] { '¡', '‼', '¹' })},
          { Key.D2, Tuple.Create(new[] { '²', '½', '√' }, new[] { '²', '½', '√' })},
          { Key.D3, Tuple.Create(new[] { '⅓', '³', '§' }, new[] { '⅓', '³', '§' })},
          { Key.D4, Tuple.Create(new[] { '£', '¥', '$', '€', '¤', '¼' }, new[] { '£', '¥', '$', '€', '¤', '¼' })},
          { Key.D5, Tuple.Create(new[] { '‰', '⅕', '♫', '♪' }, new[] { '‰', '⅕', '♫', '♪' })},
          { Key.D8, Tuple.Create(new[] { '★', '✼', '❀' }, new[] { '★', '✼', '❀' })},
-                   
+
          { Key.D9, Tuple.Create(new[] { '☹' }, new[] { '☹' })},
          { Key.OemCloseBrackets, Tuple.Create(new[] { '☹' }, new[] { '☹' })},
 
@@ -152,7 +199,7 @@ namespace SymWin
          Properties.Settings.Default.Save();
       }
 
-      public static void DeleteBindings() 
+      public static void DeleteBindings()
       {
          Properties.Settings.Default.KeyBindings = "";
          Properties.Settings.Default.Save();
