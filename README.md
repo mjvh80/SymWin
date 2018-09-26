@@ -32,7 +32,7 @@ It is easy to build, however, by running the ```build.cmd``` script or using Vis
 - clone this repository
 - run build.cmd or use Visual Studio
 
-### Configuring Custim Symbols
+### Configuring Custom Symbols
 
 Right-clicking on the SymWin tray icon and selecting `Configure Symbols` opens the dialog. 
 
