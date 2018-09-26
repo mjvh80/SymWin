@@ -32,6 +32,14 @@ It is easy to build, however, by running the ```build.cmd``` script or using Vis
 - clone this repository
 - run build.cmd or use Visual Studio
 
+### Configuring Custim Symbols
+
+Right-clicking on the SymWin tray icon and selecting `Configure Symbols` opens the dialog. 
+
+- Either type the key while the dropdown is selected, or select the appopriate key from the dropdown
+- Add the character you want to add on that key to the end of both boxes (_one is for each case: e.g. é or É_)
+  - To assign more than one character to a key, just add each character one after another (_e.g. type äå for ä and å_)
+
 Todo:
 -----
 - SymWin does not activate the popup window when the keyboard is used which makes the application appear within the application the user is currently working in. This does *not*, however, work when the mouse is used (the target application loses focus for a second). I don't currently know how to prevent this. Any help is appreciated.
