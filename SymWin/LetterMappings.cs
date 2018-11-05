@@ -34,7 +34,7 @@ namespace SymWin
          { Key.P, Tuple.Create(new[] { 'π', '¶' }, new[] { 'Π', '¶' })},
          { Key.Q, _sEmpty},
          { Key.R, Tuple.Create(new[] { '®', 'ρ' }, new[] { '®', 'Ρ' })},
-         { Key.S, Tuple.Create(new[] { 'ß', 'š', 'σ' }, new[] { 'ß', 'Š', 'Σ' })},
+         { Key.S, Tuple.Create(new[] { 'ß', 'š', 'σ' }, new[] { 'ẞ', 'Š', 'Σ' })},
          { Key.T, Tuple.Create(new[] { 'τ', '™' }, new[] { 'τ', '™' })},
          { Key.U, Tuple.Create(new[] { 'ù', 'ú', 'û', 'ü' }, new[] { 'Ù', 'Ú', 'Û', 'Ü' })},
          { Key.V, _sEmpty},
